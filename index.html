@@ -1,31 +1,29 @@
-<html class="no-js" lang="en">
-
+<!-- Author = Armaan Chandra -->
+<!doctype html>
+<html>
 <head>
   <title>My OnlineBookStore</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800">
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/styles.css">
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 
+    <!-- This allows the bookstore.js to link with index.html -->
+  <script src="bookstore.js"></script> 
 
+  <!-- turn this into a bookstore.css file later -->
   <style type="text/css">
     .jumbotron {
       margin-top: 20px;
@@ -55,36 +53,42 @@
       text-transform: uppercase;
       justify-content: center;
     }
+    
+    .forgotLink{
+      position: absolute;
+      left: 5px;
+    }
   </style>
 </head>
 
 <body>
   <!-- Creating the template here -->
   <div class="container">
+    <!-- Header Navigation bar + Search box -->
     <nav class="navbar navbar-dark" style="background-color: #0b4269;" justify-content-between>
       <div class="header1">
         <h2> BookStore </h2>
       </div>
-
       <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search" placeholder="Looking for something?" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <input class="form-control mr-sm-2" id="searchBar" type="search" placeholder="Looking for something?" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchBtn">Search</button>
       </form>
     </nav>
 
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #156b92;" justify-content-between>
       <a class="nav-item" style="color: #f8f8f8;" href="#" data-toggle="modal"
-        data-target="#loginModal">Login/Register</a>
+        data-target="#loginModal" id="login1">Login/Register</a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">MyAccount</a>
+            <a id="MyAccount" class="nav-link" href="#">MyAccount</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Wishlist</a>
+            <a id="Wishlist" class="nav-link" href="#">Wishlist</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Cart</a>
+            <a id="Cart" class="nav-link" href="#">Cart</a>
           </li>
         </ul>
       </div>
@@ -97,7 +101,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h3>
-                <center>Login</center>
+                Login
               </h3>
             </div>
             <div class="modal-body">
@@ -105,22 +109,23 @@
                 <div class="form-group row">
                   <label for="inputEmail4" class="col-sm-2 col-form-label">Email</label>
                   <div class="col-sm-10">
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="email@example.com">
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="email@example.com" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
                   <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
                   </div>
                 </div>
               </form>
-              <button type="button" class="btn btn-light btn-lg btn-block">Sign in With Google</button>
-              <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal">Create
+              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn">Sign in With Google</button>
+              <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal" id="registerLink">Create
                   Account</a></p>
             </div>
             <div class="modal-footer">
-              <a href="#" class="btn btn-primary btn-md active" role="button" aria-pressed="true">Login</a>
+              <p><br><a href="#" class="forgotLink" id="forgotPasswordLink" > Forgot Password? </a></p>
+              <a href="#" class="btn btn-primary btn-md active" role="button" aria-pressed="true" id="loginSubmit">Login</a>
             </div>
           </div>
         </div>
@@ -128,19 +133,21 @@
     </div>
 
     <!-- This is the popup modal for the create account / register page -->
-    <div class="col-md-12">
-      <div class="modal fade" id="registerModal">
-        <div class="modal-dialog modal-dialog-centered">
+      <div class="modal fade bd-example-modal-lg" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h3>
-                <center>Create Account</center>
+              <h3 class="modal-title" id="exampleModalLongTitle">
+                Create Account
               </h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <div class="modal-body">
               <form>
                 <div class="form-row">
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-5 mb-3">
                     <label for="validationDefault01">First name</label>
                     <input type="text" class="form-control" id="validationDefault01" placeholder="First name" required>
                   </div>
@@ -148,53 +155,51 @@
                     <label for="validationDefault02">Last name</label>
                     <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" required>
                   </div>
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                     <label for="validationDefaultEmail">Email</label>
                     <input type="email" class="form-control" id="validationDefaultEmail" placeholder="email@example.com"
                       required>
                   </div>
-                  <div class="col-md-3 mb-3">
+                  <div class="col-md-2 mb-3">
                     <label for="validationDefault05">Zip</label>
                     <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
+                  </div>
+                  <div class="col-md-5 mb-3">
+                      <label for="validationDefault03">City</label>
+                      <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
+                  </div>
+                  <div class="col-md-8 mb-3">
+                      <label for="validationDefault04">Address</label>
+                      <input type="text" class="form-control" id="validationDefault04" placeholder="Address" required>
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="col-md-6 mb-3">
-                    <label for="validationDefault03">City</label>
-                    <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
+                    <label for="inputPassword2">Password</label>
+                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password" required>
                   </div>
                   <div class="col-md-6 mb-3">
-                    <label for="validationDefault04">Address</label>
-                    <input type="text" class="form-control" id="validationDefault04" placeholder="Address" required>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
-                    <label class="form-check-label" for="invalidCheck2">
-                      Agree to terms and conditions
-                    </label>
+                    <label for="inputPassword3">Re-Enter Password</label>
+                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password" required>
                   </div>
                 </div>
               </form>
               <!-- form ends -->
-              <button type="button" class="btn btn-light btn-lg btn-block">Sign in With Google</button>
-              <p><br>Already have an account with us? <a href="#">Login</a></p>
-              <!-- when the login is clicked js hides this form and shows login form  -->
-            </div>
-            <div class="modal-footer">
-              <a href="#" class="btn btn-primary btn-md active" role="button" aria-pressed="true">Create Account</a>
+              <button type="button" class="btn btn-dark btn-lg btn-block" id="createAccount">Create Account</button>
+              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn2">Sign in With Google</button>
+              <p><br>Already have an account with us? <a href="#" id="back2Login">Login</a></p>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
+    <!-- Top Image -->
     <div class="jumbotron">
       <h1 class="display-4">Welcome!</h1>
       <p class="lead">Shop the latest collection of Books Online.</p>
     </div>
 
+    <!-- Cards that will hold GoogleBookAPI Information -->
     <div class="row">
       <div class="col-sm-12">
         <div class="card mb-4">
@@ -234,19 +239,14 @@
       </div>
     </div>
 
-
+    <!-- Footer image that links to scrolls to top -->
     <div class="jumbotron1" style="background-color: #1a5672;">
         <p class="lead"><br> </p>
         <h3 class="display-5">Create An Account To Begin Reading!</h3>
         <p class="lead"><a class="btn btn-dark btn-lg" href="#" role="button" data-toggle="modal" data-target="#registerModal">Create Account</a></p>
         <p class="lead"><br> </p>
     </div>
-
   </div>
-
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/popper.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
 
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
@@ -254,8 +254,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 </body>
 
 </html>
