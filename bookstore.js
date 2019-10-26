@@ -1,6 +1,8 @@
 $(document).ready(function(e) {
     // Author: Armaan Chandra 
 
+    $("#navbar2").hide();
+
     /*
     This is the functionality of the searchBar
     */
@@ -51,8 +53,14 @@ $(document).ready(function(e) {
             console.log("User email: " + loginsEmail);
             console.log("User Password " + loginsPassword);
 
+
+
             //after verification is success or fail. Response accordingly
             $("#loginModal").modal('hide'); //this is just here temporaraly 
+            $("#navbar1").hide();
+            $("#navbar2").show();
+            // i would want to obtain the FirstName and LastName of this user instead
+            $("#uservalue").html("Welcome " + loginsEmail); //injects the loginEmail into the HTML
         });
 
         
@@ -74,7 +82,7 @@ $(document).ready(function(e) {
         .click(function(){
             $("#registerModal").modal('hide');
             $("#loginModal").modal('show'); 
-        })
+        });
 
     $("#createAccount")
         .click(function(){
@@ -102,7 +110,22 @@ $(document).ready(function(e) {
 
             //if the passwords don't match..
             //if the email is already in the database
-        })
+        });
+
+    $("#opHistory")
+        .click(function(){
+            console.log("take you to the order/purchase history page");
+        });
+
+    $("#logout")
+        .click(function(){
+            console.log("Logging user out");
+
+            //clear all the information about the user was gathered on the page
+
+            $("#navbar2").hide();
+            $("#navbar1").show();
+        });
 
     
 });

@@ -1,13 +1,14 @@
 <!-- Author = Armaan Chandra -->
 <!doctype html>
 <html>
+
 <head>
   <title>My OnlineBookStore</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -20,8 +21,8 @@
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 
-    <!-- This allows the bookstore.js to link with index.html -->
-  <script src="bookstore.js"></script> 
+  <!-- This allows the bookstore.js to link with index.html -->
+  <script src="bookstore.js"></script>
 
   <!-- turn this into a bookstore.css file later -->
   <style type="text/css">
@@ -36,7 +37,7 @@
       color: aliceblue;
       margin-top: 20px;
       background-image: url("./Images/footerimage3.jpg");
-      background-size:cover;
+      background-size: cover;
     }
 
     .header1 {
@@ -53,8 +54,8 @@
       text-transform: uppercase;
       justify-content: center;
     }
-    
-    .forgotLink{
+
+    .forgotLink {
       position: absolute;
       left: 5px;
     }
@@ -70,19 +71,36 @@
         <h2> BookStore </h2>
       </div>
       <form class="form-inline">
-        <input class="form-control mr-sm-2" id="searchBar" type="search" placeholder="Looking for something?" aria-label="Search">
+        <input class="form-control mr-sm-2" id="searchBar" type="search" placeholder="Looking for something?"
+          aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchBtn">Search</button>
       </form>
     </nav>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #156b92;" justify-content-between>
-      <a class="nav-item" style="color: #f8f8f8;" href="#" data-toggle="modal"
-        data-target="#loginModal" id="login1">Login/Register</a>
+    <!-- Navigation Bar before user has logged in -->
+    <nav class="navbar navbar-expand-lg navbar-dark" id="navbar1" style="background-color: #156b92;"
+      justify-content-between>
+      <a class="nav-item" style="color: #f8f8f8;" href="#" data-toggle="modal" data-target="#loginModal"
+        id="login1">Login/Register</a>
+    </nav>
+
+    <!-- Nav bar after user is logged in -->
+    <nav class="navbar navbar-expand-lg navbar-dark" id="navbar2" style="background-color: #156b92;">
+
+      <a class="welcomeMessage" style="color: #f8f8f8;" id="uservalue" value=""></a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a id="MyAccount" class="nav-link" href="#">MyAccount</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              MyAccount
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" id="MyAccount" href="#">Profile</a>
+              <a class="dropdown-item" id="opHistory" href="#">Order/Purchase History</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" id="logout">Logout </a>
+            </div>
           </li>
           <li class="nav-item">
             <a id="Wishlist" class="nav-link" href="#">Wishlist</a>
@@ -93,6 +111,7 @@
         </ul>
       </div>
     </nav>
+
 
     <!-- This is the popup modal form for login/register. -->
     <div class="col-md-12">
@@ -119,13 +138,16 @@
                   </div>
                 </div>
               </form>
-              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn">Sign in With Google</button>
-              <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal" id="registerLink">Create
+              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn">Sign in With
+                Google</button>
+              <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
+                  id="registerLink">Create
                   Account</a></p>
             </div>
             <div class="modal-footer">
-              <p><br><a href="#" class="forgotLink" id="forgotPasswordLink" > Forgot Password? </a></p>
-              <a href="#" class="btn btn-primary btn-md active" role="button" aria-pressed="true" id="loginSubmit">Login</a>
+              <p><br><a href="#" class="forgotLink" id="forgotPasswordLink"> Forgot Password? </a></p>
+              <a href="#" class="btn btn-primary btn-md active" role="button" aria-pressed="true"
+                id="loginSubmit">Login</a>
             </div>
           </div>
         </div>
@@ -133,65 +155,66 @@
     </div>
 
     <!-- This is the popup modal for the create account / register page -->
-      <div class="modal fade bd-example-modal-lg" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 class="modal-title" id="exampleModalLongTitle">
-                Create Account
-              </h3>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="form-row">
-                  <div class="col-md-5 mb-3">
-                    <label for="validationDefault01">First name</label>
-                    <input type="text" class="form-control" id="validationDefault01" placeholder="First name" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="validationDefault02">Last name</label>
-                    <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" required>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <label for="validationDefaultEmail">Email</label>
-                    <input type="email" class="form-control" id="validationDefaultEmail" placeholder="email@example.com"
-                      required>
-                  </div>
-                  <div class="col-md-2 mb-3">
-                    <label for="validationDefault05">Zip</label>
-                    <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
-                  </div>
-                  <div class="col-md-5 mb-3">
-                      <label for="validationDefault03">City</label>
-                      <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
-                  </div>
-                  <div class="col-md-8 mb-3">
-                      <label for="validationDefault04">Address</label>
-                      <input type="text" class="form-control" id="validationDefault04" placeholder="Address" required>
-                  </div>
+    <div class="modal fade bd-example-modal-lg" id="registerModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLongTitle">
+              Create Account
+            </h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-row">
+                <div class="col-md-5 mb-3">
+                  <label for="validationDefault01">First name</label>
+                  <input type="text" class="form-control" id="validationDefault01" placeholder="First name" required>
                 </div>
-                <div class="form-row">
-                  <div class="col-md-6 mb-3">
-                    <label for="inputPassword2">Password</label>
-                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password" required>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="inputPassword3">Re-Enter Password</label>
-                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password" required>
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label for="validationDefault02">Last name</label>
+                  <input type="text" class="form-control" id="validationDefault02" placeholder="Last name" required>
                 </div>
-              </form>
-              <!-- form ends -->
-              <button type="button" class="btn btn-dark btn-lg btn-block" id="createAccount">Create Account</button>
-              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn2">Sign in With Google</button>
-              <p><br>Already have an account with us? <a href="#" id="back2Login">Login</a></p>
-            </div>
+                <div class="col-md-4 mb-3">
+                  <label for="validationDefaultEmail">Email</label>
+                  <input type="email" class="form-control" id="validationDefaultEmail" placeholder="email@example.com"
+                    required>
+                </div>
+                <div class="col-md-2 mb-3">
+                  <label for="validationDefault05">Zip</label>
+                  <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
+                </div>
+                <div class="col-md-5 mb-3">
+                  <label for="validationDefault03">City</label>
+                  <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
+                </div>
+                <div class="col-md-8 mb-3">
+                  <label for="validationDefault04">Address</label>
+                  <input type="text" class="form-control" id="validationDefault04" placeholder="Address" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="inputPassword2">Password</label>
+                  <input type="password" class="form-control" id="inputPassword2" placeholder="Password" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="inputPassword3">Re-Enter Password</label>
+                  <input type="password" class="form-control" id="inputPassword3" placeholder="Password" required>
+                </div>
+              </div>
+            </form>
+            <!-- form ends -->
+            <button type="button" class="btn btn-dark btn-lg btn-block" id="createAccount">Create Account</button>
+            <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn2">Sign in With Google</button>
+            <p><br>Already have an account with us? <a href="#" id="back2Login">Login</a></p>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- Top Image -->
     <div class="jumbotron">
@@ -241,10 +264,11 @@
 
     <!-- Footer image that links to scrolls to top -->
     <div class="jumbotron1" style="background-color: #1a5672;">
-        <p class="lead"><br> </p>
-        <h3 class="display-5">Create An Account To Begin Reading!</h3>
-        <p class="lead"><a class="btn btn-dark btn-lg" href="#" role="button" data-toggle="modal" data-target="#registerModal">Create Account</a></p>
-        <p class="lead"><br> </p>
+      <p class="lead"><br> </p>
+      <h3 class="display-5">Create An Account To Begin Reading!</h3>
+      <p class="lead"><a class="btn btn-dark btn-lg" href="#" role="button" data-toggle="modal"
+          data-target="#registerModal">Create Account</a></p>
+      <p class="lead"><br> </p>
     </div>
   </div>
 
