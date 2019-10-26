@@ -59,6 +59,15 @@
       position: absolute;
       left: 5px;
     }
+
+    .registerModal{
+      overflow-y: initial !important
+    }
+
+    .modal-body{
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
   </style>
 </head>
 
@@ -163,13 +172,12 @@
             <h3 class="modal-title" id="exampleModalLongTitle">
               Create Account
             </h3>
-            
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-              <p style="text-align: center;">Already have an account with us? <a href="#" id="back2Login">Login</a></p>
+            <p style="text-align: center;">Already have an account with us? <a href="#" id="back2Login">Login</a></p>
             <form>
               <div class="form-row">
                 <div class="col-md-5 mb-3">
@@ -209,11 +217,103 @@
                 </div>
               </div>
               <small id="length" class="form-text text-muted" style="text-align: center;"><br></small>
+              <small id="match" class="form-text text-muted" style="text-align: center;"><br></small>
               <button type="button" class="btn btn-dark btn-lg btn-block" id="createAccount">Create Account</button>
-              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn2">Sign in With Google</button>
+              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn2">Sign in With
+                Google</button>
             </form>
             <!-- form ends -->
-            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- This a confirmation popup. Telling the user the an account has been successfully created. -->
+    <div class="modal" tabindex="-1" role="dialog" id="createdAccountConfirmation">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Account Created</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Account successfully created. Please Login</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+              data-target="#loginModal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- This is a popup. Telling the user that creating account was UNSUCCESSFUL -->
+    <div class="modal" tabindex="-1" role="dialog" id="failedCreateAccount">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Oops, Something went wrong!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Please ensure that ALL fields are filled out and that passwords
+              match.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+              data-target="#registerModal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- This is a popup telling the user that login was successfull -->
+    <div class="modal" tabindex="-1" role="dialog" id="successLogin">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Login Successful</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You're ready to being browsing the latest collection of Books online. Enjoy reading
+              from our collection, purchase books you love and build a list of future reads.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- This is a popup telling the user that login was successfull -->
+    <div class="modal" tabindex="-1" role="dialog" id="failedLogin">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Opps Something Went Wrong</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              We weren't able to recognize the username or password you entered.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
+              data-target="#loginModal">Close</button>
           </div>
         </div>
       </div>

@@ -58,6 +58,12 @@ $(document).ready(function(e) {
     // i would want to obtain the FirstName and LastName of this user instead
     $("#uservalue").html("Welcome " + loginsEmail); //injects the loginEmail into the HTML
 
+    //if the login was successfull - the inputs are within the database.
+    //$("#successLogin").modal("show");
+
+    //else if the login failed - username/password was wrong
+    //$("#failedLogin").modal("show");
+
     resetLoginFields();
   });
 
@@ -110,6 +116,13 @@ $(document).ready(function(e) {
     //if the email is already in the database
 
     $("#registerModal").modal("hide");
+    //if the account was successfully created. Show the successful popup
+
+    //$("#createdAccountConfirmation").modal("show");
+    
+    //else if the account was unsuccessful - Show the unsucessful popup. 
+     
+    //$("#failedCreateAccount").modal("show");
     resetCreateAccount();
   });
 
@@ -155,6 +168,24 @@ $(document).ready(function(e) {
       if (counter == 3) {
         $("#length").html("Password Strength: Good");
       }
+    }
+  }
+
+  $("#inputPassword3").on("keyup", function() {
+    checkMatch();
+  });
+  function checkMatch(){
+    var pw1 = $("#inputPassword2").val();
+    var pw2 = $("#inputPassword3").val();
+
+    console.log(pw1);
+    console.log(pw2);
+
+    if(pw1 === pw2){
+        console.log(" not equal");
+        $("#match").html("Password Match");
+    }else{
+        $("#match").html("Password Don't Match");
     }
   }
 
