@@ -16,9 +16,9 @@ express()
   .get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
-      const result = await client.query('SELECT * FROM test_table');
+      const result = await client.query('SELECT * FROM user_accounts');
       const results = { 'results': (result) ? result.rows : null};
-      res.render('pages/db', results );
+      res.render('viwes/pages/db', results ); 
       client.release();
     } catch (err) {
       console.error(err);
