@@ -58,6 +58,8 @@ $(document).ready(function(e) {
     // i would want to obtain the FirstName and LastName of this user instead
     $("#uservalue").html("Welcome " + loginsEmail); //injects the loginEmail into the HTML
 
+    
+
     //if the login was successfull - the inputs are within the database.
     //$("#successLogin").modal("show");
 
@@ -111,6 +113,20 @@ $(document).ready(function(e) {
     console.log(address);
     console.log(pass1);
     console.log(pass2);
+
+    //i should have a check here
+    // if(pass1 != pass2) - show a popup that tells the user to fill the form out properly.
+
+    $.ajax({
+        url: "/user",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ firstname: fName, lastname: lName, email: createEmail, zip: zipCode,
+            city: city, address: address, password: pass1}),
+        success: function(response) {
+            console.log(response);
+          }
+        });
 
     //if the passwords don't match..
     //if the email is already in the database
