@@ -51,7 +51,12 @@ $(document).ready(function(e) {
     console.log("User email: " + loginsEmail);
     console.log("User Password " + loginsPassword);
 
+
+    //this will require the salted and hashed password.
+
+    //if the login was successfull - the inputs are within the database.
     //after verification is success or fail. Response accordingly
+    //$("#successLogin").modal("show");
     $("#loginModal").modal("hide"); //this is just here temporaraly
     $("#navbar1").hide();
     $("#navbar2").show();
@@ -60,9 +65,7 @@ $(document).ready(function(e) {
 
     
 
-    //if the login was successfull - the inputs are within the database.
-    //$("#successLogin").modal("show");
-
+    
     //else if the login failed - username/password was wrong
     //$("#failedLogin").modal("show");
 

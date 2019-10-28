@@ -10,6 +10,8 @@ const path = require('path')
 var bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000
 
+const bcrypt = require('bcryptjs');
+
 
 express()
   .use(express.static(path.join(__dirname)))
@@ -43,6 +45,7 @@ express()
     }
   })
 
+  /* This POST function will first check to see if the given email is already in the database. */
   .post("/user", async function (req, res) { //this call is successfully adding to the database.
     var firstName = req.body.firstname;
     var lastName = req.body.lastname;
@@ -53,8 +56,39 @@ express()
     var password = req.body.password;
 
     var existsFlag = false;
-    
+
+    var dbSalt = "";
+    var dbHash = "";
+
     //I NEED TO SALT AND HASH THE PASSWORD
+    /* HOW TO HASH CREATING ACCOUNT :
+      1: generate random string as long as the password.
+      2: prepend the salt to the password 
+      3: hash the pw+salt
+      4: save the salt and the hash
+       */
+
+    //HASHING + SALTING THE PASSWORD:
+    bcrypt.genSalt(10, (err, salt) => { //this is the generation of SALT
+      if(err){
+        console.error(err);
+      }else{ //we obtained the salt
+        dbSalt = salt;
+        bcrypt.hash(password, salt, (err, hash) => { //this is generation of HASH
+          if(err){
+            console.error(err);
+          }else{ //we obtained the hash
+            dbHash = hash;
+          }
+        });
+      }
+    });
+
+    /* HOW TO HASH LOGIN
+      1: get the salt and hash from the password
+      2: add the salt to the given password and hash it
+      3: compare hash in DB and hash output of given pw
+      */
 
     try {
       const client = await pool.connect();
@@ -72,7 +106,7 @@ express()
       }
       //else the email entered is not in the database. - therefore proceed to insert.
       const result = await client.query(`INSERT INTO user_accounts(firstname, lastname, email, city, address, zipcode, hashpassword, salt)
-        VALUES('${firstName}','${lastName}','${email}','${city}','${address}','${zipCode}','${password}','salt') returning *`);
+        VALUES('${firstName}','${lastName}','${email}','${city}','${address}','${zipCode}','${dbHash}','${dbSalt}') returning *`);
       const results = { results: result ? result.rows : null };
       res.status(200).send(result);
       client.release();
