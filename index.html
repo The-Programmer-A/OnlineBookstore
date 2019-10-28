@@ -266,12 +266,33 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal"
-              data-target="#registerModal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- this pop up tells the user that the email is already in the database -->
+    <div class="modal" tabindex="-1" role="dialog" id="emailInUse">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Oops, Something went wrong!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>It looks like the email you have entered is already in the database.<br></p>
+              <p style="text-align: left;">Click here to login! <a href="#" id="back2Login2">Login</a></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
 
     <!-- This is a popup telling the user that login was successfull -->
     <div class="modal" tabindex="-1" role="dialog" id="successLogin">

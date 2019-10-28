@@ -92,9 +92,7 @@ $(document).ready(function(e) {
   });
 
   $("#createAccount").click(function() {
-    //and store all the fields from the form & store them into the database.
-    //First ensure that the user has checked the boxes.
-    //need to ensure that all fields are rest on exit
+    //obtain all the fields for POSTING to DB
     var fName = $("#validationDefault01").val();
     var lName = $("#validationDefault02").val();
     var createEmail = $("#validationDefaultEmail").val();
@@ -105,42 +103,52 @@ $(document).ready(function(e) {
     var pass1 = $("#inputPassword2").val();
     var pass2 = $("#inputPassword3").val();
 
-    console.log(fName);
-    console.log(lName);
-    console.log(createEmail);
-    console.log(zipCode);
-    console.log(city);
-    console.log(address);
-    console.log(pass1);
-    console.log(pass2);
+    $("#inputPassword2").css("border-color", "##ff0000");
+    $("#inputPassword3").css("border-color", "##ff0000");
 
-    //i should have a check here
-    // if(pass1 != pass2) - show a popup that tells the user to fill the form out properly.
+    if(pass1 != pass2){ //if the passwords don't match let them try again
+        $("#inputPassword2").css("border-color", "#ff0000");
+        $("#inputPassword3").css("border-color", "#ff0000");
+        return;
+    }
 
-    $.ajax({
-        url: "/user",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ firstname: fName, lastname: lName, email: createEmail, zip: zipCode,
-            city: city, address: address, password: pass1}),
-        success: function(response) {
-            console.log(response);
-          }
+    //if ANY field is left empty
+    if(fName=="" || lName=="" || createEmail=="" ||zipCode=="" || city=="" || address=="" || pass1=="" || pass2==""){
+        console.log("creation failed");
+        $("#failedCreateAccount").modal("show");
+    }else{ //all the fields are filled
+        $.ajax({ //requesting to post the data
+            url: "/user",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ firstname: fName, lastname: lName, email: createEmail, zip: zipCode,
+                city: city, address: address, password: pass1}), //send the data to the service 
+            success: function(response) {
+                //if the email is already in the database
+                if(response === true){
+                    $("#emailInUse").modal("show");
+                    return;
+                }
+                //else the account was created and inserted into the database.
+                console.log("account created successfully");
+                $("#registerModal").modal("hide");  
+                $("#createdAccountConfirmation").modal("show");
+                resetCreateAccount();
+            }
         });
-
-    //if the passwords don't match..
-    //if the email is already in the database
-
-    $("#registerModal").modal("hide");
-    //if the account was successfully created. Show the successful popup
-
-    //$("#createdAccountConfirmation").modal("show");
-    
-    //else if the account was unsuccessful - Show the unsucessful popup. 
-     
-    //$("#failedCreateAccount").modal("show");
-    resetCreateAccount();
+    }
+    //reset the password fields always.
+    $("#inputPassword2").val("");
+    $("#inputPassword3").val("");
   });
+
+  $("#back2Login2").click(function(){
+    $("#emailInUse").modal("hide");
+    $("#registerModal").modal("hide");
+    resetCreateAccount();
+    resetLoginFields();
+    $("#loginModal").modal("show");
+  })
 
   $("#opHistory").click(function() {
     console.log("take you to the order/purchase history page");
@@ -175,6 +183,7 @@ $(document).ready(function(e) {
 
       if (counter == 1) {
         $("#length").html("Password Strength: Too Weak");
+
       }
 
       if (counter == 2) {
@@ -198,10 +207,9 @@ $(document).ready(function(e) {
     console.log(pw2);
 
     if(pw1 === pw2){
-        console.log(" not equal");
-        $("#match").html("Password Match");
+        $("#match").html("Passwords: Match");
     }else{
-        $("#match").html("Password Don't Match");
+        $("#match").html("Passwords: Don't Match");
     }
   }
 

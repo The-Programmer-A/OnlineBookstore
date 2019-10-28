@@ -28,9 +28,22 @@ express()
       res.send("Error " + err);
     }
   })
-  .post("/user", async function (req, res) {
-    // var newTask = req.body.task;
-    // var newName = req.body.name;
+  //call to read from the database.
+  .get("/user", async (req, res) => {
+    try {
+      const client = await pool.connect();
+      const result = await client.query("SELECT * FROM user_accounts");
+      const results = { results: result ? result.rows : null };
+      console.log(results); //are we going to get null?
+      res.send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
+
+  .post("/user", async function (req, res) { //this call is successfully adding to the database.
     var firstName = req.body.firstname;
     var lastName = req.body.lastname;
     var email = req.body.email;
@@ -39,15 +52,28 @@ express()
     var address = req.body.address;
     var password = req.body.password;
 
-    //i need to add a salt and hash that password.
+    var existsFlag = false;
+    
+    //I NEED TO SALT AND HASH THE PASSWORD
 
-    console.log("hello i am getting to the post method");
     try {
       const client = await pool.connect();
+      const ensureResult = await client.query(`SELECT EXISTS(SELECT 1 FROM user_accounts where email='${email}') AS "exists"`);
+      const ensureResults = ensureResult.rows;
+
+      ensureResults.forEach(element => {
+        existsFlag = element.exists;
+      })
+
+      if(existsFlag){
+        res.send(existsFlag);
+        client.release();
+        return;
+      }
+      //else the email entered is not in the database. - therefore proceed to insert.
       const result = await client.query(`INSERT INTO user_accounts(firstname, lastname, email, city, address, zipcode, hashpassword, salt)
         VALUES('${firstName}','${lastName}','${email}','${city}','${address}','${zipCode}','${password}','salt') returning *`);
       const results = { results: result ? result.rows : null };
-      //the query failed therefore format of newTask or newName is incorrect
       res.status(200).send(result);
       client.release();
     } catch (err) {
