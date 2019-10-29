@@ -19,19 +19,8 @@ express()
   .use(express.static(path.join(__dirname)))
   .use(bodyParser.json()) //allow me to use the body parser.
   .get('/', (req, res) => res.render('index'))
-  .get('/data', async (req, res) => { //this is obtaining the data - good
-    try {
-      const client = await pool.connect()
-      const result = await client.query('SELECT * FROM user_accounts');
-      const results = { results: (result) ? result.rows : null};
-      client.release();
-      console.log(results);
-      res.render('database');
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
-  })
+
+  .get('/search', (req, res) => res.sendFile('./searchBooks.html', {root: __dirname}))
   //call to authenticate from the database. Use POST as its more secure
   .post("/login", async function (req, res) {
       //obtain the email and the password.
