@@ -20,7 +20,7 @@ express()
   .use(bodyParser.json()) //allow me to use the body parser.
   .get('/', (req, res) => res.render('index'))
   //this is the call to a second webpage.
-  .get('/search', (req, res) => res.sendFile('./searchBooks.html', {root: __dirname}))
+  .get('/search', (req, res) => res.sendFile('./Pages/searchBooks.html', {root: __dirname}))
   //call to authenticate from the database. Use POST as its more secure
   .post("/login", async function (req, res) {
       //obtain the email and the password.
