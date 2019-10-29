@@ -52,24 +52,37 @@ $(document).ready(function(e) {
     console.log("User Password " + loginsPassword);
 
 
-    //this will require the salted and hashed password.
+    //validate the inputs with the records within the database.
+    $.ajax({
+        url: "/login",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: loginsEmail, pass: loginsPassword }),
+        success: function(response) {
+            if(response === false){
+                console.log("Email or Password incorrect");
 
-    //if the login was successfull - the inputs are within the database.
-    //after verification is success or fail. Response accordingly
-    //$("#successLogin").modal("show");
-    $("#loginModal").modal("hide"); //this is just here temporaraly
-    $("#navbar1").hide();
-    $("#navbar2").show();
-    // i would want to obtain the FirstName and LastName of this user instead
-    $("#uservalue").html("Welcome " + loginsEmail); //injects the loginEmail into the HTML
-
-    
-
+                $("#failedLogin").modal("show");
+            }else{ //the password is correct
+                console.log(response);
+                var firstName = null;
+                response.results.forEach(element => {
+                    firstName = element.firstname;
+                  })
+                $("#successLogin").modal("show");
+                $("#loginModal").modal("hide");
+                $("#uservalue").html("Welcome " + firstName); //injects the firstName into the HTML
+                $("#navbar1").hide();
+                $("#navbar2").show();
+            }
+        },
+  
+    });
     
     //else if the login failed - username/password was wrong
-    //$("#failedLogin").modal("show");
+    //
 
-    resetLoginFields();
+    //resetLoginFields();
   });
 
   $("#registerLink").click(function() {
@@ -121,7 +134,7 @@ $(document).ready(function(e) {
         $("#failedCreateAccount").modal("show");
     }else{ //all the fields are filled
         $.ajax({ //requesting to post the data
-            url: "/user",
+            url: "/create",
             method: "POST",
             contentType: "application/json",
             data: JSON.stringify({ firstname: fName, lastname: lName, email: createEmail, zip: zipCode,
@@ -164,6 +177,7 @@ $(document).ready(function(e) {
 
     $("#navbar2").hide();
     $("#navbar1").show();
+    resetLoginFields();
   });
 
   $("#inputPassword2").on("keyup", function() {
@@ -215,6 +229,10 @@ $(document).ready(function(e) {
         $("#match").html("Passwords: Don't Match");
     }
   }
+
+  $("#failedLoginClose").click(function(){
+      $("#inputPassword").val("");
+  })
 
   //this is a helper method used to reset the fields on the Create Account form.
   function resetCreateAccount(){

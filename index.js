@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 5000
 
 const bcrypt = require('bcryptjs');
 
+global.loggedinFlag = false;
+
 
 express()
   .use(express.static(path.join(__dirname)))
@@ -30,23 +32,59 @@ express()
       res.send("Error " + err);
     }
   })
-  //call to read from the database.
-  .get("/user", async (req, res) => {
+  //call to authenticate from the database. Use POST as its more secure
+  .post("/login", async function (req, res) {
+      //obtain the email and the password.
+      var loginEmail = req.body.email;
+      var loginPassword = req.body.pass;
+      var hashPassword = "";
+     
+
     try {
       const client = await pool.connect();
-      const result = await client.query("SELECT * FROM user_accounts");
-      const results = { results: result ? result.rows : null };
-      console.log(results); //are we going to get null?
-      res.send(results);
-      client.release();
+      const result = await client.query(`SELECT firstname, hashpassword FROM user_accounts where email='${loginEmail}'`);
+      const results = { results: result ? result.rows : null }; 
+
+      if(results.results.length == 0){
+        console.log("nothing returned");
+        res.sendStatus(400);
+        client.release();
+        return;
+      }
+
+      results.results.forEach(element => {
+        hashPassword = element.hashpassword;
+      })
+
+      //obtained the hash
+      const match = await bcrypt.compareSync(loginPassword, hashPassword, (err, equal) => { //this is not returning what i need. should be able to evaluate the right and wrong passwords
+        if(err){
+          console.error(err);
+        } else {
+          if(equal){
+            console.log("correct password");
+            loggedinFlag = true;
+          }else{
+            console.log("wrong password");
+          } 
+        }
+      });
+
+      if(match){ //if the password was correct
+        res.status(200).send(results);
+        client.release();
+        return;
+      }else{ //the password was incorrect
+        res.status(200).send(false);
+        client.release();
+      }
     } catch (err) {
       console.error(err);
       res.send("Error " + err);
     }
   })
-
   /* This POST function will first check to see if the given email is already in the database. */
-  .post("/user", async function (req, res) { //this call is successfully adding to the database.
+  .post("/create", async function (req, res) { //this call is successfully adding to the database.
     var firstName = req.body.firstname;
     var lastName = req.body.lastname;
     var email = req.body.email;
@@ -54,20 +92,10 @@ express()
     var city = req.body.city;
     var address = req.body.address;
     var password = req.body.password;
-
-    var existsFlag = false;
-
     var dbSalt = "";
     var dbHash = "";
-
-    //I NEED TO SALT AND HASH THE PASSWORD
-    /* HOW TO HASH CREATING ACCOUNT :
-      1: generate random string as long as the password.
-      2: prepend the salt to the password 
-      3: hash the pw+salt
-      4: save the salt and the hash
-       */
-
+    var existsFlag = false;
+    
     //HASHING + SALTING THE PASSWORD:
     bcrypt.genSalt(10, (err, salt) => { //this is the generation of SALT
       if(err){
@@ -83,12 +111,6 @@ express()
         });
       }
     });
-
-    /* HOW TO HASH LOGIN
-      1: get the salt and hash from the password
-      2: add the salt to the given password and hash it
-      3: compare hash in DB and hash output of given pw
-      */
 
     try {
       const client = await pool.connect();
