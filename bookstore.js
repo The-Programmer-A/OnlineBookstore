@@ -4,6 +4,10 @@ $(document).ready(function(e) {
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
 
+  $("#searchBar").click(function(){
+    $(location).attr('href', 'http://localhost:5000/?#');
+  })
+
   /*
     This is the functionality of the searchBar
     */
@@ -11,16 +15,25 @@ $(document).ready(function(e) {
     //take the input from the searchBar and use it
     var searchInput = $("#searchBar").val(); //query the API and display the results
     console.log(searchInput);
+    var apiData = null;
 
     $.ajax({
         url: "https://www.googleapis.com/books/v1/volumes?q=" + searchInput,
         dataType: "json",
         success: function(data) {
             console.log(data);
-            $("#searchBar").val("");
+            apiData = JSON.stringify(data);
+        
         }, 
+        complete: function(){
+          $("#searchBar").val("");
+          $(location).attr('href', 'http://localhost:5000/search'); // this is working
+          $('#showsomething').html("good morning there");
+        },
         type: 'GET'
     }); 
+
+   
     
   });
 

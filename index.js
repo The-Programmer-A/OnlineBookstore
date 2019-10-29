@@ -19,7 +19,7 @@ express()
   .use(express.static(path.join(__dirname)))
   .use(bodyParser.json()) //allow me to use the body parser.
   .get('/', (req, res) => res.render('index'))
-
+  //this is the call to a second webpage.
   .get('/search', (req, res) => res.sendFile('./searchBooks.html', {root: __dirname}))
   //call to authenticate from the database. Use POST as its more secure
   .post("/login", async function (req, res) {
@@ -35,7 +35,6 @@ express()
       const results = { results: result ? result.rows : null }; 
 
       if(results.results.length == 0){
-        console.log("nothing returned");
         res.sendStatus(400);
         client.release();
         return;
