@@ -20,13 +20,15 @@ $(document).ready(function(e) {
         url: "https://www.googleapis.com/books/v1/volumes?q=" + searchInput,
         dataType: "json",
         success: function(data) {
+
             console.log(data);
             apiData = JSON.stringify(data);
             apiData = btoa(unescape(encodeURIComponent(apiData)));
             localStorage.setItem('_account', apiData);
         }, 
-        error: function(){
-          console.log("hey were in an error");
+        error: function(errorThrown){
+          console.log("hey were in an error" + JSON.stringify(errorThrown));
+          return;
         },
         complete: function(){
           $("#searchBar").val("");
