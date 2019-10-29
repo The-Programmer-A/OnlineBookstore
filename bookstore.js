@@ -9,11 +9,22 @@ $(document).ready(function(e) {
     */
   $("#searchBtn").click(function() {
     //take the input from the searchBar and use it
-    var searchInput = $("#searchBar").val(); //query the database and display the results
+    var searchInput = $("#searchBar").val(); //query the API and display the results
     console.log(searchInput);
+    $.ajax({
+        url: "https://www.googleapis.com/books/v1/volumes?q=" + searchInput,
+        dataType: "json",
+        success: function(data) {
+            console.log(data);
+        }, 
+
+        type: 'GET'
+
+    });
+
     //reset the search bar after functionality.
     $("#searchBar").val("");
-  });
+  }); 
 
   /* This is the functionality of the links in the header.
     MyAccount, Wishlist, Cart */
