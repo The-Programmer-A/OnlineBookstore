@@ -1,6 +1,5 @@
 $(document).ready(function(e) {
   // Author: Armaan Chandra
-
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
 
@@ -23,12 +22,16 @@ $(document).ready(function(e) {
         success: function(data) {
             console.log(data);
             apiData = JSON.stringify(data);
-        
+            apiData = btoa(unescape(encodeURIComponent(apiData)));
+            localStorage.setItem('_account', apiData);
         }, 
+        error: function(){
+          console.log("hey were in an error");
+        },
         complete: function(){
           $("#searchBar").val("");
           $(location).attr('href', 'http://localhost:5000/search'); // this is working
-          $('#showsomething').html("good morning there");
+
         },
         type: 'GET'
     }); 
