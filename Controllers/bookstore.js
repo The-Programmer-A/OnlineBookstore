@@ -1,11 +1,12 @@
 $(document).ready(function(e) {
-  // Author: Armaan Chandra
+  var userEmail = "";
+  var userLogged = false;
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
 
-  $("#searchBar").click(function(){
-    $(location).attr('href', 'http://localhost:5000/?#');
-  })
+  $("#searchBar").click(function() {
+    $(location).attr("href", "http://localhost:5000/?#");
+  });
 
   /*
     This is the functionality of the searchBar
@@ -14,32 +15,40 @@ $(document).ready(function(e) {
     //take the input from the searchBar and use it
     var searchInput = $("#searchBar").val(); //query the API and display the results
     console.log(searchInput);
+    var errorFlag = false;
     var apiData = null;
 
     $.ajax({
-        url: "https://www.googleapis.com/books/v1/volumes?q=" + searchInput,
-        dataType: "json",
-        success: function(data) {
+      url: "https://www.googleapis.com/books/v1/volumes?q=" + searchInput,
+      dataType: "json",
+      success: function(data) {
+        //send the JSON data from API
+        console.log(data);
+        apiData = JSON.stringify(data);
+        apiData = btoa(unescape(encodeURIComponent(apiData)));
+        localStorage.setItem("_account", apiData);
 
-            console.log(data);
-            apiData = JSON.stringify(data);
-            apiData = btoa(unescape(encodeURIComponent(apiData)));
-            localStorage.setItem('_account', apiData);
-        }, 
-        error: function(errorThrown){
-          console.log("hey were in an error" + JSON.stringify(errorThrown));
+        //send the email.
+        console.log(userEmail);
+        userEmail = JSON.stringify(userEmail);
+        userEmail = btoa(unescape(encodeURIComponent(userEmail)));
+        localStorage.setItem("_email", userEmail);
+      },
+      error: function(errorThrown) {
+        console.log("hey were in an error" + JSON.stringify(errorThrown));
+        errorFlag = true;
+        return;
+      },
+      complete: function() {
+        if (errorFlag) {
+          console.log("something went wrong");
           return;
-        },
-        complete: function(){
-          $("#searchBar").val("");
-          $(location).attr('href', 'http://localhost:5000/search'); // this is working
-
-        },
-        type: 'GET'
-    }); 
-
-   
-    
+        }
+        $("#searchBar").val("");
+        $(location).attr("href", "http://localhost:5000/search"); // this is working
+      },
+      type: "GET"
+    });
   });
 
   /* This is the functionality of the links in the header.
@@ -78,38 +87,35 @@ $(document).ready(function(e) {
     console.log("User email: " + loginsEmail);
     console.log("User Password " + loginsPassword);
 
-
     //validate the inputs with the records within the database.
     $.ajax({
-        url: "/login",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ email: loginsEmail, pass: loginsPassword }),
-        success: function(response) {
-            if(response === false){
-                console.log("Email or Password incorrect");
-
-                $("#failedLogin").modal("show");
-            }else{ //the password is correct
-                console.log(response);
-                var firstName = null;
-                response.results.forEach(element => {
-                    firstName = element.firstname;
-                  })
-                $("#successLogin").modal("show");
-                $("#loginModal").modal("hide");
-                $("#uservalue").html("Welcome " + firstName); //injects the firstName into the HTML
-                $("#navbar1").hide();
-                $("#navbar2").show();
-            }
-        },
-  
+      url: "/login",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: loginsEmail, pass: loginsPassword }),
+      success: function(response) {
+        if (response === false) {
+          console.log("Email or Password incorrect");
+          $("#failedLogin").modal("show");
+        } else {
+          //the password is correct
+          userEmail = loginsEmail;
+          console.log(response);
+          var firstName = null;
+          response.results.forEach(element => {
+            firstName = element.firstname;
+          });
+          $("#successLogin").modal("show");
+          $("#loginModal").modal("hide");
+          $("#uservalue").html("Welcome " + firstName); //injects the firstName into the HTML
+          $("#navbar1").hide();
+          $("#navbar2").show();
+          userLogged = true;
+          resetLoginFields();
+        }
+      }
     });
-    
-    //else if the login failed - username/password was wrong
-    //
 
-    //resetLoginFields();
   });
 
   $("#registerLink").click(function() {
@@ -149,49 +155,68 @@ $(document).ready(function(e) {
     $("#inputPassword2").css("border-color", "##ff0000");
     $("#inputPassword3").css("border-color", "##ff0000");
 
-    if(pass1 != pass2){ //if the passwords don't match let them try again
-        $("#inputPassword2").css("border-color", "#ff0000");
-        $("#inputPassword3").css("border-color", "#ff0000");
-        return;
+    if (pass1 != pass2) {
+      //if the passwords don't match let them try again
+      $("#inputPassword2").css("border-color", "#ff0000");
+      $("#inputPassword3").css("border-color", "#ff0000");
+      return;
     }
 
     //if ANY field is left empty
-    if(fName=="" || lName=="" || createEmail=="" ||zipCode=="" || city=="" || address=="" || pass1=="" || pass2==""){
-        console.log("creation failed");
-        $("#failedCreateAccount").modal("show");
-    }else{ //all the fields are filled
-        $.ajax({ //requesting to post the data
-            url: "/create",
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ firstname: fName, lastname: lName, email: createEmail, zip: zipCode,
-                city: city, address: address, password: pass1}), //send the data to the service 
-            success: function(response) {
-                //if the email is already in the database
-                if(response === true){
-                    $("#emailInUse").modal("show");
-                    return;
-                }
-                //else the account was created and inserted into the database.
-                console.log("account created successfully");
-                $("#registerModal").modal("hide");  
-                $("#createdAccountConfirmation").modal("show");
-                resetCreateAccount();
-            }
-        });
+    if (
+      fName == "" ||
+      lName == "" ||
+      createEmail == "" ||
+      zipCode == "" ||
+      city == "" ||
+      address == "" ||
+      pass1 == "" ||
+      pass2 == ""
+    ) {
+      console.log("creation failed");
+      $("#failedCreateAccount").modal("show");
+    } else {
+      //all the fields are filled
+      $.ajax({
+        //requesting to post the data
+        url: "/create",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          firstname: fName,
+          lastname: lName,
+          email: createEmail,
+          zip: zipCode,
+          city: city,
+          address: address,
+          password: pass1
+        }), //send the data to the service
+        success: function(response) {
+          //if the email is already in the database
+          if (response === true) {
+            $("#emailInUse").modal("show");
+            return;
+          }
+          //else the account was created and inserted into the database.
+          console.log("account created successfully");
+          $("#registerModal").modal("hide");
+          $("#createdAccountConfirmation").modal("show");
+          resetCreateAccount();
+        }
+      });
     }
     //reset the password fields always.
     $("#inputPassword2").val("");
     $("#inputPassword3").val("");
   });
 
-  $("#back2Login2").click(function(){
+  $("#back2Login2").click(function() {
     $("#emailInUse").modal("hide");
     $("#registerModal").modal("hide");
     resetCreateAccount();
     resetLoginFields();
     $("#loginModal").modal("show");
-  })
+  });
 
   $("#opHistory").click(function() {
     console.log("take you to the order/purchase history page");
@@ -227,7 +252,6 @@ $(document).ready(function(e) {
 
       if (counter == 1) {
         $("#length").html("Password Strength: Too Weak");
-
       }
 
       if (counter == 2) {
@@ -243,39 +267,39 @@ $(document).ready(function(e) {
   $("#inputPassword3").on("keyup", function() {
     checkMatch();
   });
-  function checkMatch(){
+  function checkMatch() {
     var pw1 = $("#inputPassword2").val();
     var pw2 = $("#inputPassword3").val();
 
     console.log(pw1);
     console.log(pw2);
 
-    if(pw1 === pw2){
-        $("#match").html("Passwords: Match");
-    }else{
-        $("#match").html("Passwords: Don't Match");
+    if (pw1 === pw2) {
+      $("#match").html("Passwords: Match");
+    } else {
+      $("#match").html("Passwords: Don't Match");
     }
   }
 
-  $("#failedLoginClose").click(function(){
-      $("#inputPassword").val("");
-  })
+  $("#failedLoginClose").click(function() {
+    $("#inputPassword").val("");
+  });
 
   //this is a helper method used to reset the fields on the Create Account form.
-  function resetCreateAccount(){
-      //reset all fields to empty
-      $("#validationDefault01").val("");
-      $("#validationDefault02").val("");
-      $("#validationDefaultEmail").val("");
-      $("#validationDefault05").val("");
-      $("#validationDefault03").val("");
-      $("#validationDefault04").val("");
-      $("#inputPassword2").val("");
-      $("#inputPassword3").val("");
-      $("#length").html("");
+  function resetCreateAccount() {
+    //reset all fields to empty
+    $("#validationDefault01").val("");
+    $("#validationDefault02").val("");
+    $("#validationDefaultEmail").val("");
+    $("#validationDefault05").val("");
+    $("#validationDefault03").val("");
+    $("#validationDefault04").val("");
+    $("#inputPassword2").val("");
+    $("#inputPassword3").val("");
+    $("#length").html("");
   }
 
-  function resetLoginFields(){
+  function resetLoginFields() {
     $("#inputEmail4").val("");
     $("#inputPassword").val("");
   }

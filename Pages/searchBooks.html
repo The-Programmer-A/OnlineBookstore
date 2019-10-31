@@ -7,6 +7,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <script src="https://kit.fontawesome.com/4f9f01ee09.js" crossorigin="anonymous"></script>
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
@@ -24,6 +26,17 @@
     <!-- This allows the bookstore.js to link with index.html -->
     <script src="../Controllers/searchController.js"></script>
 
+    <style type="text/css">
+        .thumbnail {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info {
+            float:right;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -36,16 +49,53 @@
             </div>
         </nav>
 
-        <!-- Navigation Bar before user has logged in -->
-        <nav class="navbar navbar-expand-lg navbar-dark" id="navbar1" style="background-color: #156b92;"
-            justify-content-between>
-            <a class="nav-item" style="color: #f8f8f8;" href="#" data-toggle="modal"> Send a logged in users details also.</a>
-        </nav>
+        <ul class="nav justify-content-center"  style="background-color: #156b92;">
+            <li >
+                <a class="nav-link active" href="#" id="Home1" style="color: #f8f8f8; justify-content: center;"> <i
+                        class="fas fa-home"></i>Home</a>
+            </li>
+        </ul>
+        <ul  class="nav justify-content-end" id="navbar1" style="background-color: #156b92;">
+            <li>
+                <a class="info" style="color: #f8f8f8; justify-content: center;"> <i class="fas fa-book-reader"></i> Sign in to purchase books!</a>
+            </li>
+        </ul>
 
-       
-            <div class="list-group"></div>
+
+    <!-- Navigation Bar before user has logged in -->
+    <nav class="navbar navbar-expand-lg navbar-dark" id="navbar2" style="background-color: #156b92;">
+        <a class="welcomeMessage" style="color: #f8f8f8;" id="uservalue" value=""></a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        MyAccount
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" id="MyAccount" href="#">Profile</a>
+                        <a class="dropdown-item" id="opHistory" href="#">Order/Purchase History</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" id="logout">Logout </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a id="Wishlist" class="nav-link" href="#">Wishlist</a>
+                </li>
+                <li class="nav-item">
+                    <a id="Cart" class="nav-link" href="#">Cart</a>
+                </li>
+            </ul>
         </div>
-           
+    </nav>
+
+
+    <div class="list-group"></div>
+
+    <!-- create a modal allowing too add a book to cart/watchlist -->
+    <div class="modal" tabindex="-1" role="dialog" id="details"></div>
+    </div>
+
 </body>
 
 </html>

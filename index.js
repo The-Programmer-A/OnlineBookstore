@@ -21,6 +21,22 @@ express()
   .get('/', (req, res) => res.render('index'))
   //this is the call to a second webpage.
   .get('/search', (req, res) => res.sendFile('./Pages/searchBooks.html', {root: __dirname}))
+  //call to get the users firstname
+  .post('/getName', async function (req, res) {
+    var loginEmail = req.body.email;
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        `SELECT firstname FROM user_accounts where email='${loginEmail}'`
+      );
+      const results = { results: result ? result.rows : null };
+      res.status(200).send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
   //call to authenticate from the database. Use POST as its more secure
   .post("/login", async function (req, res) {
       //obtain the email and the password.
@@ -35,7 +51,7 @@ express()
       const results = { results: result ? result.rows : null }; 
 
       if(results.results.length == 0){
-        res.sendStatus(400);
+        res.status(200).send(false);
         client.release();
         return;
       }
