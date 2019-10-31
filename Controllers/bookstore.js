@@ -1,6 +1,7 @@
 $(document).ready(function(e) {
   var userEmail = "";
   var userLogged = false;
+  var authenticate = null;
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
 
@@ -111,6 +112,9 @@ $(document).ready(function(e) {
           $("#navbar1").hide();
           $("#navbar2").show();
           userLogged = true;
+          authenticate = loginsPassword;
+          updateUserService(userLogged);
+          updateUserAuth();
           resetLoginFields();
         }
       }
@@ -302,5 +306,24 @@ $(document).ready(function(e) {
   function resetLoginFields() {
     $("#inputEmail4").val("");
     $("#inputPassword").val("");
+  }
+
+  function updateUserService(status){
+    //this will send information to the service
+    if(status){
+        userEmail = JSON.stringify(userEmail);
+        userEmail = btoa(unescape(encodeURIComponent(userEmail)));
+        localStorage.setItem("_emailState", userEmail);
+    }else{
+        localStorage.setItem("_emailState", null);
+    }
+  }
+
+  function updateUserAuth(){
+    if(authenticate != null){
+      authenticate = JSON.stringify(authenticate);
+      authenticate = btoa(unescape(encodeURIComponent(authenticate)));
+      localStorage.setItem("_authenticate", authenticate);
+    }
   }
 });
