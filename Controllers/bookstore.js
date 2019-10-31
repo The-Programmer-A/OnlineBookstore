@@ -1,5 +1,6 @@
 $(document).ready(function(e) {
   var userEmail = "";
+  var userEmailState = "";
   var userLogged = false;
   var authenticate = null;
   //hide the navigation bar that should only be shown to logged in users.
@@ -100,6 +101,7 @@ $(document).ready(function(e) {
           $("#failedLogin").modal("show");
         } else {
           //the password is correct
+          userEmailState = loginsEmail;
           userEmail = loginsEmail;
           console.log(response);
           var firstName = null;
@@ -119,7 +121,6 @@ $(document).ready(function(e) {
         }
       }
     });
-
   });
 
   $("#registerLink").click(function() {
@@ -289,6 +290,57 @@ $(document).ready(function(e) {
     $("#inputPassword").val("");
   });
 
+  //this is to populate the middle areas of the proograms
+  var errorFlag = false;
+  var newData = null;
+  $.ajax({
+    url: "https://www.googleapis.com/books/v1/volumes?q=flowers&orderBy=newest",
+    dataType: "json",
+    success: function(data) {
+      //send the JSON data from API
+      console.log(data);
+      newData = data;
+    },
+    error: function(errorThrown) {
+      console.log("hey were in an error" + JSON.stringify(errorThrown));
+      errorFlag = true;
+      return;
+    },
+    complete: function() {
+      if (errorFlag) {
+        console.log("something went wrong");
+        return;
+      }
+      displayNewest(newData);
+    },
+    type: "GET"
+  });
+
+  function displayNewest(data) {
+    console.log("displaying the newest");
+    var cList = $("div.hor");
+
+    var ul = $("<ul/>")
+      .addClass("list-group list-group-horizontal")
+      .attr("href", "#")
+      .appendTo(cList);
+
+    for (let i = 0; i < data.items.length / 2; i++) {
+      var li = $("<li/>")
+        .addClass("list-group-item")
+        .text(data.items[i].volumeInfo.title)
+        .appendTo(ul);
+
+      var image = $("<img/>")
+        .attr("src", data.items[i].volumeInfo.imageLinks.thumbnail)
+        .appendTo(li);
+    }
+  }
+
+  $("#card2").click(function() {
+    console.log("in this 2");
+  });
+
   //this is a helper method used to reset the fields on the Create Account form.
   function resetCreateAccount() {
     //reset all fields to empty
@@ -308,19 +360,19 @@ $(document).ready(function(e) {
     $("#inputPassword").val("");
   }
 
-  function updateUserService(status){
+  function updateUserService(status) {
     //this will send information to the service
-    if(status){
-        userEmail = JSON.stringify(userEmail);
-        userEmail = btoa(unescape(encodeURIComponent(userEmail)));
-        localStorage.setItem("_emailState", userEmail);
-    }else{
-        localStorage.setItem("_emailState", null);
+    if (status) {
+      userEmailState = JSON.stringify(userEmailState);
+      userEmailState = btoa(unescape(encodeURIComponent(userEmailState)));
+      localStorage.setItem("_emailState", userEmailState);
+    } else {
+      localStorage.setItem("_emailState", null);
     }
   }
 
-  function updateUserAuth(){
-    if(authenticate != null){
+  function updateUserAuth() {
+    if (authenticate != null) {
       authenticate = JSON.stringify(authenticate);
       authenticate = btoa(unescape(encodeURIComponent(authenticate)));
       localStorage.setItem("_authenticate", authenticate);
