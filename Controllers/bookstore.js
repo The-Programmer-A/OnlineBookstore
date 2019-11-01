@@ -302,6 +302,7 @@ $(document).ready(function(e) {
     error: function(errorThrown) {
       console.log("hey were in an error" + JSON.stringify(errorThrown));
       errorFlag = true;
+      displayNoData();
       return;
     },
     complete: function() {
@@ -314,13 +315,10 @@ $(document).ready(function(e) {
     type: "GET"
   });
 
+  var cList = $("div.horizontalList");
   function displayNewest(data) {
-    console.log("displaying the newest");
-    var cList = $("div.horizontalList");
-    
     var ul = $("<ul/>")
       .addClass("list-group list-group-horizontal")
-      .attr("id", "uItem")
       .appendTo(cList);
 
     for (let i = 0; i < data.items.length / 2; i++) {
@@ -342,12 +340,12 @@ $(document).ready(function(e) {
 
       var btn2 = $("<button/>")
         .addClass("btn btn-light btn-sm btn-block")
-        .attr("id", "wishlist")
+        .attr("id", "wishlist"+[i])
         .appendTo(li);
   
       var btn3 = $("<button/>")
         .addClass("btn btn-light btn-sm btn-block")
-        .attr("id", "cart")
+        .attr("id", "cart" +[i])
         .appendTo(li);
 
       var watchlist = $("<i/>")
@@ -359,7 +357,102 @@ $(document).ready(function(e) {
         .appendTo(btn3);
     }
   }
-  
+ 
+
+  //inner functions of the selected items buttons.
+  $(".horizontalList").click(function() {
+    console.log("in here");
+    $("#cart0").click(function() {
+      console.log("cart clicked0");
+      console.log(newData.items[0].volumeInfo.title);
+      return;
+      //add this to the cart of the user.
+    });
+
+    $("#cart1").click(function() {
+      console.log("cart clicked1");
+      console.log(newData.items[1].volumeInfo.title);
+
+      return;
+      //add this to the cart of the user.
+    });
+
+    $("#cart2").click(function() {
+      console.log("cart clicked2");
+      console.log(newData.items[2].volumeInfo.title);
+      return;
+      //add this to the cart of the user.
+    });
+
+    $("#cart3").click(function() {
+      console.log("cart clicked3");
+      console.log(newData.items[3].volumeInfo.title);
+      return;
+      //add this to the cart of the user.
+    });
+
+    $("#cart4").click(function() {
+      console.log("cart clicked4");
+      console.log(newData.items[4].volumeInfo.title);
+      return;
+      //add this to the cart of the user.
+    });
+
+    $("#wishlist0").click(function() {
+      console.log(newData.items[0].volumeInfo.authors);
+      console.log("wishlist clicked");
+      return;
+    });
+
+    $("#wishlist1").click(function() {
+      console.log(newData.items[1].volumeInfo.authors);
+      console.log("wishlist clicked 1");
+      return;
+    });
+
+    $("#wishlist2").click(function() {
+      console.log(newData.items[2].volumeInfo.authors);
+      console.log("wishlist clicked 2");
+      return;
+    });
+
+    $("#wishlist3").click(function() {
+      console.log(newData.items[3].volumeInfo.authors);
+      console.log("wishlist clicked 3");
+      return;
+    });
+
+    $("#wishlist4").click(function() {
+      console.log(newData.items[4].volumeInfo.authors);
+      console.log("wishlist clicked 4");
+      return;
+    });
+    return;
+  });
+
+
+  function displayNoData(){
+    //create a div that holds no data.
+    var top = $("div.col-sm-12");
+
+    var div1 = $("<div/>")
+    .addClass("card mb-4")
+    .appendTo(top)
+
+    var div2 = $("<div/>")
+    .addClass("card-body text-center")
+    .appendTo(div1)
+
+    var h5 = $("<h5/>")
+    .addClass("card-title")
+    .text("Newest Releases")
+    .appendTo(div2)
+
+    var p = $("<p/>")
+    .addClass("card-text")
+    .text("Opps, Cannot display. Refresh the page.")
+    .appendTo(div2)
+  }
 
   $("#card2").click(function() {
     console.log("in this 2");
