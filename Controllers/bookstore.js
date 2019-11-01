@@ -290,15 +290,13 @@ $(document).ready(function(e) {
     $("#inputPassword").val("");
   });
 
-  //this is to populate the middle areas of the proograms
+  //IDEA - make this a carosole?
   var errorFlag = false;
   var newData = null;
   $.ajax({
     url: "https://www.googleapis.com/books/v1/volumes?q=flowers&orderBy=newest",
     dataType: "json",
     success: function(data) {
-      //send the JSON data from API
-      console.log(data);
       newData = data;
     },
     error: function(errorThrown) {
@@ -318,24 +316,50 @@ $(document).ready(function(e) {
 
   function displayNewest(data) {
     console.log("displaying the newest");
-    var cList = $("div.hor");
-
+    var cList = $("div.horizontalList");
+    
     var ul = $("<ul/>")
       .addClass("list-group list-group-horizontal")
-      .attr("href", "#")
+      .attr("id", "uItem")
       .appendTo(cList);
 
     for (let i = 0; i < data.items.length / 2; i++) {
       var li = $("<li/>")
         .addClass("list-group-item")
-        .text(data.items[i].volumeInfo.title)
-        .appendTo(ul);
+        .attr("id", [i])
+        .appendTo(ul);  
 
       var image = $("<img/>")
         .attr("src", data.items[i].volumeInfo.imageLinks.thumbnail)
+        .attr("style", "justify-content: center")
+        .attr("id", "bookImage")
         .appendTo(li);
+
+      var p = $("<p/>")
+        .text((data.items[i].volumeInfo.title).substring(0,36))
+        .attr("style", "margin:0px auto; text-align:center")
+        .appendTo(li)
+
+      var btn2 = $("<button/>")
+        .addClass("btn btn-light btn-sm btn-block")
+        .attr("id", "wishlist")
+        .appendTo(li);
+  
+      var btn3 = $("<button/>")
+        .addClass("btn btn-light btn-sm btn-block")
+        .attr("id", "cart")
+        .appendTo(li);
+
+      var watchlist = $("<i/>")
+        .addClass("fas fa-heart")
+        .appendTo(btn2);
+
+      var cart = $("<i/>")
+        .addClass("fas fa-cart-plus")
+        .appendTo(btn3);
     }
   }
+  
 
   $("#card2").click(function() {
     console.log("in this 2");
