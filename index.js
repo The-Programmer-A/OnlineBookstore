@@ -18,7 +18,7 @@ global.loggedinFlag = false;
 express()
   .use(express.static(path.join(__dirname)))
   .use(bodyParser.json()) //allow me to use the body parser.
-  .get('/', (req, res) => res.render('index'))
+  .get('/?', (req, res) => res.render('index'))
   //this is the call to a second webpage.
   .get('/search', (req, res) => res.sendFile('./Pages/searchBooks.html', {root: __dirname}))
   //call to get the ID primary key within the user_accounts - allowing forign key us in other tables
@@ -32,16 +32,11 @@ express()
       );
       const results = { results: result ? result.rows : null };
       console.log(results);
-      if(results === null){
-        //bad request - the email is not within the database
-        res.sendStatus(400); 
-        client.release();
-      }
       res.status(200).send(results);
       client.release();
     } catch (err) {
       console.error(err);
-      res.send("Error " + err);
+      res.send(err);
     }
   })
   //call to get the users firstname
@@ -184,6 +179,10 @@ express()
         `INSERT INTO wishlist (id, isbn) VALUES('${userID}', '${wishlistISBN}')returning *`
       );
       const results = { results: result ? result.rows : null };
+      if(results === null){
+        res.status(200).send(false);
+        client.release();
+      }
       res.status(200).send(results);
       client.release();
     } catch (err) {
@@ -205,7 +204,55 @@ express()
         `INSERT INTO cart (id, isbn) VALUES('${userID}', '${wishlistISBN}') returning *`
       );
       const results = { results: result ? result.rows : null };
+      if(results === null){
+        res.status(200).send(false);
+        client.release();
+      }
       console.log(results);
+      res.status(200).send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
+  //call to get all information from the wishlist database
+  .post('/wishlistInfo', async function (req, res) {
+    console.log("obtaining info from wishlist database");
+    var userID = req.body.userid;
+
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        `SELECT * FROM wishlist WHERE id='${userID}'`
+      );
+      const results = { results: result ? result.rows : null };
+      if(results === null){
+        res.status(200).send(false);
+        client.release();
+      }
+      res.status(200).send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
+  //call to get all information from the cart database
+  .post('/cartInfo', async function (req, res) {
+    console.log("obtaining info from cart database");
+    var userID = req.body.userid;
+
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        `SELECT * FROM cart WHERE id='${userID}'`
+      );
+      const results = { results: result ? result.rows : null };
+      if(results === null){
+        res.status(200).send(false);
+        client.release();
+      }
       res.status(200).send(results);
       client.release();
     } catch (err) {

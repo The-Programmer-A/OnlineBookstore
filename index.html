@@ -81,7 +81,7 @@
   <!-- Creating the template here -->
   <div class="container">
     <!-- Header Navigation bar + Search box -->
-    <nav class="navbar navbar-dark" style="background-color: #0b4269;" justify-content-between>
+    <nav class="navbar navbar-dark" id="header1" style="background-color: #0b4269;" justify-content-between>
       <div class="header1">
         <h2> BookStore </h2>
       </div>
@@ -90,6 +90,13 @@
           aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchBtn">Search</button>
       </form>
+    </nav>
+
+    <!-- header nav bar -->
+    <nav class="navbar navbar-dark" id="header2" style="background-color: #0b4269;" justify-content-between>
+      <div class="header1">
+        <h2> BookStore </h2>
+      </div>
     </nav>
 
     <!-- Navigation Bar before user has logged in -->
@@ -407,6 +414,91 @@
         </div>
       </div>
     </div>
+
+    <!-- this is a modal to show that the user must be signed in to add books to their cart/wishlist -->
+    <div class="modal" tabindex="-1" role="dialog" id="mustbesignedin">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Opps Something went wrong</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p style="text-align: center;">You must be signed in to add books to your Wishlist or Cart.</p>
+            <p style="text-align: center;"><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
+              id="registerLink2">Create Account</a></p> 
+            <p style="text-align: center;">Already have an account with us? <a href="#" id="back2Login3">Login</a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- This is a modal to show that addition to the cart was successfull -->
+    <div class="modal" tabindex="-1" role="dialog" id="additionsuccess">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">successfully added to cart</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Successfully added to Cart. Click close to keep browsing, or view your cart now.</p>
+            <p style="text-align: center;">View cart? <a href="#" id="viewCartLink">Cart</a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- this is a modal to show that addition to the wishlist was successfull -->
+    <div class="modal" tabindex="-1" role="dialog" id="additionsuccesswishlist">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">successfully added to cart</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Successfully added to Wishlist. Click close to keep browsing, or view your wishlist now.</p>
+            <p style="text-align: center;">View Wishlist? <a href="#" id="viewwishlistLink">Wishlist</a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- this is a modal to show that addition to the cart/wishlist was unsuccessfull -->
+      <div class="modal fade bd-example-modal-sm" id="wishlistcartNot" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Opps, Something went wrong</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Unfortunatly, we were unable to process that request. Please try again later</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <!-- Footer image that links to scrolls to top -->
     <div class="jumbotron1" style="background-color: #1a5672;">

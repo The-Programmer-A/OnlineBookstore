@@ -176,25 +176,24 @@ $(document).ready(function(e) {
       .appendTo(div4);
 
     $("#details").modal("show");
-    
     console.log("you clicked: " + $(this).attr("id"));
     
     //inner functions of the selected items buttons.
     $("#cart").click(function() {
       console.log("cart clicked");
-      if(email.length < 1){
-        console.log("you must be logged in to purchase a book");
-        //show a modal of this message - offer them to login?
+      if(email === null){
+        console.log("need to be logged in");
+        return;
       }
       var userEmail = email;
       var clickedISBN = data.items[selectedItem].id;
-      var userID = 0;
+      var userID = -1;
       $.ajax({
         url: "/getID",
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({ email: userEmail }),
-        success: function(response) {
+        success: function(response){
             response.results.forEach(element => {
               console.log(typeof element);
               userID = element.id;
@@ -208,9 +207,11 @@ $(document).ready(function(e) {
             contentType: "application/json",
             data: JSON.stringify({ userid: userID, isbn: clickedISBN }),
             success: function(response) {
-             console.log("RESPONSE" + JSON.stringify(response));
-             //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
-             //else return to the user that something went wrong.
+             if(response === false){
+               //do nothing
+             }else{
+              $("#details").modal("hide");
+             }
             },
           });
         },
@@ -219,10 +220,6 @@ $(document).ready(function(e) {
 
     $("#wishlist").click(function() {
       console.log("wishlist clicked");
-      if(email.length < 1){
-        console.log("you must be logged in to purchase a book");
-        //show a modal of this message - offer them to login?
-      }
       var userEmail = email;
       var clickedISBN = data.items[selectedItem].id;
       var userID = 0;
@@ -246,8 +243,15 @@ $(document).ready(function(e) {
             data: JSON.stringify({ userid: userID, isbn: clickedISBN }),
             success: function(response) {
              console.log("RESPONSE" + JSON.stringify(response));
-             //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
-             //else return to the user that something went wrong.
+             if(response === false){
+              //do nothing
+             }else{
+              $("#details").modal("hide");
+             }
+            },
+            error: function(errorThrown) {
+              console.log("hey were in an error" + JSON.stringify(errorThrown));
+              return;
             },
           });
         },
@@ -262,7 +266,7 @@ $(document).ready(function(e) {
 
   $("#Home1")
     .click(function(){
-      $(location).attr("href", "http://localhost:5000/");
+      $(location).attr("href", "http://localhost:5000/?#");
     })
   
     /*

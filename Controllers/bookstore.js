@@ -5,6 +5,7 @@ $(document).ready(function(e) {
   var authenticate = null;
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
+  $("#header1").hide();
   //$("#loadingModal").modal("hide");
 
   $("#searchBar").click(function() {
@@ -71,10 +72,89 @@ $(document).ready(function(e) {
 
   $("#Wishlist").click(function() {
     console.log("Should take you to the Wishlist page");
+    //call to get information from the wishlist database.
+    var userID = 0;
+    //get the id
+    $.ajax({
+      url: "/getID",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: userEmail }),
+      success: function(response) {
+          response.results.forEach(element => {
+            console.log(typeof element);
+            userID = element.id;
+          });
+      }, 
+      complete: function(){
+        //use the id of active user and the isbn to populate database. 
+        $.ajax({
+          url: "/wishlistInfo",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ userid: userID}),
+          success: function(response) {
+           console.log("RESPONSE" + JSON.stringify(response));
+            var wishlistInfo = [];
+            //store all this information locally in an array - send it to another page. 
+            wishlistInfo = response.results;
+
+            wishlistInfo.forEach(element => {
+              console.log(element);
+            })
+
+            //this is how to obtain the information of the wishlist info.
+            console.log(wishlistInfo[0].id + " " + wishlistInfo[0].isbn);
+          },
+          complete: function(){
+            console.log("wishlist info gained");
+          },
+        });
+      },
+    });
   });
 
   $("#Cart").click(function() {
     console.log("Should take you to the Cart page");
+    var userID = 0;
+    //get the id
+    $.ajax({
+      url: "/getID",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: userEmail }),
+      success: function(response) {
+          response.results.forEach(element => {
+            console.log(typeof element);
+            userID = element.id;
+          });
+      }, 
+      complete: function(){
+        //use the id of active user and the isbn to populate database. 
+        $.ajax({
+          url: "/cartInfo",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ userid: userID}),
+          success: function(response) {
+           console.log("RESPONSE" + JSON.stringify(response));
+           var cartInfo = [];
+            //store all this information locally in an array - send it to another page. 
+            cartInfo = response.results;
+
+            cartInfo.forEach(element => {
+              console.log(element);
+            })
+
+            //this is how to obtain the information of the wishlist info.
+            console.log(cartInfo[0].id + " " + cartInfo[0].isbn);
+          },
+          complete: function(){
+            console.log("cart info gained");
+          },
+        });
+      },
+    });
   });
 
   /* This is dealing with the inputs of the login popup modal. handles the 
@@ -123,6 +203,8 @@ $(document).ready(function(e) {
           $("#uservalue").html("Welcome " + firstName); //injects the firstName into the HTML
           $("#navbar1").hide();
           $("#navbar2").show();
+          $("#header2").hide();
+          $("#header1").show();
           userLogged = true;
           authenticate = loginsPassword;
           updateUserService(userLogged);
@@ -432,6 +514,7 @@ $(document).ready(function(e) {
     if(userEmail.length < 1){
       //show popup that tells the user to login before they add to cart
       console.log("You must be signed in to purchase books");
+      $("#mustbesignedin").modal("show");
       return;
     }
     var userID = 0;
@@ -457,8 +540,11 @@ $(document).ready(function(e) {
           data: JSON.stringify({ userid: userID, isbn: bookISBN }),
           success: function(response) {
            console.log("RESPONSE" + JSON.stringify(response));
-           //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
-           //else return to the user that something went wrong.
+            if(response === false){
+              $("#wishlistcartNot").modal("show");
+            }else{ //response was not false = successful
+              $("#additionsuccess").modal("show");
+            }
           },
         });
       },
@@ -496,7 +582,11 @@ $(document).ready(function(e) {
           success: function(response) {
            console.log("RESPONSE" + JSON.stringify(response));
            //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
-           //else return to the user that something went wrong.
+           if(response === false){
+            $("#wishlistcartNot").modal("show");
+           }else{ //response was not false = successful
+            $("#additionsuccesswishlist").modal("show");
+           }
           },
         });
       },
@@ -560,6 +650,25 @@ $(document).ready(function(e) {
       localStorage.setItem("_emailState", null);
     }
   }
+
+  $("#registerLink2").click(function(){
+    $("#mustbesignedin").modal("hide");
+  })
+
+  $("#back2Login3").click(function(){
+    $("#mustbesignedin").modal("hide");
+    $("#loginModal").modal("show");
+  })
+
+  $("#viewCartLink").click(function(){
+    $("#additionsuccess").modal("hide");
+    console.log("send the user to their cart");
+  })
+
+  $("#viewwishlistLink").click(function(){
+    $("#additionsuccesswishlist").modal("hide");
+    console.log("send the user to their wishlist");
+  })
 
   function updateUserAuth() {
     if (authenticate != null) {
