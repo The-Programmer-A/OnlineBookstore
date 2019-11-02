@@ -182,14 +182,76 @@ $(document).ready(function(e) {
     //inner functions of the selected items buttons.
     $("#cart").click(function() {
       console.log("cart clicked");
-      //add this to the cart of the user.
+      if(email.length < 1){
+        console.log("you must be logged in to purchase a book");
+        //show a modal of this message - offer them to login?
+      }
+      var userEmail = email;
+      var clickedISBN = data.items[selectedItem].id;
+      var userID = 0;
+      $.ajax({
+        url: "/getID",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: userEmail }),
+        success: function(response) {
+            response.results.forEach(element => {
+              console.log(typeof element);
+              userID = element.id;
+            });
+        }, 
+        complete: function(){
+          //use the id of active user and the isbn to populate database. 
+          $.ajax({
+            url: "/cart",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ userid: userID, isbn: clickedISBN }),
+            success: function(response) {
+             console.log("RESPONSE" + JSON.stringify(response));
+             //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
+             //else return to the user that something went wrong.
+            },
+          });
+        },
+      });
     });
 
     $("#wishlist").click(function() {
       console.log("wishlist clicked");
-      //add this to the wishlist of the user.
-      //acheive this through an ajax call that posts the infomration to the server.
-      //store the data.items[selectedItem] here
+      if(email.length < 1){
+        console.log("you must be logged in to purchase a book");
+        //show a modal of this message - offer them to login?
+      }
+      var userEmail = email;
+      var clickedISBN = data.items[selectedItem].id;
+      var userID = 0;
+      $.ajax({
+        url: "/getID",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: userEmail }),
+        success: function(response) {
+            response.results.forEach(element => {
+              console.log(typeof element);
+              userID = element.id;
+            });
+        }, 
+        complete: function(){
+          //use the id of active user and the isbn to populate database. 
+          $.ajax({
+            url: "/wishlist",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ userid: userID, isbn: clickedISBN }),
+            success: function(response) {
+             console.log("RESPONSE" + JSON.stringify(response));
+             //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
+             //else return to the user that something went wrong.
+            },
+          });
+        },
+      });
     });
   });
 
