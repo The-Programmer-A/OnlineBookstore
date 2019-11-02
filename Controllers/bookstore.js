@@ -5,6 +5,7 @@ $(document).ready(function(e) {
   var authenticate = null;
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
+  //$("#loadingModal").modal("hide");
 
   $("#searchBar").click(function() {
     $(location).attr("href", "http://localhost:5000/?#");
@@ -16,6 +17,7 @@ $(document).ready(function(e) {
   $("#searchBtn").click(function() {
     //take the input from the searchBar and use it
     var searchInput = $("#searchBar").val(); //query the API and display the results
+    $("#loadingModal").modal("show");
     console.log(searchInput);
     var errorFlag = false;
     var apiData = null;
@@ -25,6 +27,8 @@ $(document).ready(function(e) {
       dataType: "json",
       success: function(data) {
         //send the JSON data from API
+
+      
         console.log(data);
         apiData = JSON.stringify(data);
         apiData = btoa(unescape(encodeURIComponent(apiData)));
@@ -39,13 +43,19 @@ $(document).ready(function(e) {
       error: function(errorThrown) {
         console.log("hey were in an error" + JSON.stringify(errorThrown));
         errorFlag = true;
+        //load a error pop up
+        $("#loadingModal").modal("hide");
+        $("#noSearch").modal("show");
         return;
       },
       complete: function() {
         if (errorFlag) {
           console.log("something went wrong");
+          $("#noSearch").modal("show");
+          $("#searchBar").val("");
           return;
         }
+        $("#loadingModal").modal("hide");
         $("#searchBar").val("");
         $(location).attr("href", "http://localhost:5000/search"); // this is working
       },
@@ -294,9 +304,10 @@ $(document).ready(function(e) {
   var errorFlag = false;
   var newData = null;
   $.ajax({
-    url: "https://www.googleapis.com/books/v1/volumes?q=flowers&orderBy=newest",
+    url: "https://www.googleapis.com/books/v1/volumes?q=the&orderBy=newest", //i changed this
     dataType: "json",
     success: function(data) {
+      console.log(data);
       newData = data;
     },
     error: function(errorThrown) {
@@ -360,75 +371,113 @@ $(document).ready(function(e) {
  
 
   //inner functions of the selected items buttons.
-  $(".horizontalList").click(function() {
-    console.log("in here");
+  $(".horizontalList").click( function() {
+    console.log(userEmail)
+    /* this will be adding isbn into the cart database */
     $("#cart0").click(function() {
-      console.log("cart clicked0");
-      console.log(newData.items[0].volumeInfo.title);
+      console.log("adding to cart");
+      addToCart(newData.items[0].id);
       return;
-      //add this to the cart of the user.
     });
 
     $("#cart1").click(function() {
-      console.log("cart clicked1");
-      console.log(newData.items[1].volumeInfo.title);
-
+      console.log("adding to cart");
+      addToCart(newData.items[1].id);
       return;
-      //add this to the cart of the user.
     });
 
     $("#cart2").click(function() {
-      console.log("cart clicked2");
-      console.log(newData.items[2].volumeInfo.title);
+      console.log("adding to cart");
+      addToCart(newData.items[2].id);
       return;
-      //add this to the cart of the user.
     });
 
     $("#cart3").click(function() {
-      console.log("cart clicked3");
-      console.log(newData.items[3].volumeInfo.title);
+      console.log("adding to cart");
+      addToCart(newData.items[3].id);
       return;
-      //add this to the cart of the user.
     });
 
     $("#cart4").click(function() {
-      console.log("cart clicked4");
-      console.log(newData.items[4].volumeInfo.title);
+      console.log("adding to cart");
+      addToCart(newData.items[4].id);
       return;
-      //add this to the cart of the user.
     });
+
+    /* This is adding the selected books ISBN into the wishlist database */
 
     $("#wishlist0").click(function() {
       console.log(newData.items[0].volumeInfo.authors);
-      console.log("wishlist clicked");
       return;
     });
 
     $("#wishlist1").click(function() {
       console.log(newData.items[1].volumeInfo.authors);
-      console.log("wishlist clicked 1");
       return;
     });
 
     $("#wishlist2").click(function() {
       console.log(newData.items[2].volumeInfo.authors);
-      console.log("wishlist clicked 2");
       return;
     });
 
     $("#wishlist3").click(function() {
       console.log(newData.items[3].volumeInfo.authors);
-      console.log("wishlist clicked 3");
       return;
     });
 
     $("#wishlist4").click(function() {
       console.log(newData.items[4].volumeInfo.authors);
-      console.log("wishlist clicked 4");
       return;
     });
     return;
   });
+
+  function addToCart(bookID){
+    if(userEmail.length < 1){
+      //show popup that tells the user to login before they add to cart
+      console.log("You must be signed in to purchase books");
+      return;
+    }
+    console.log("in the process of adding to cart");
+    var userID = 0;
+    var bookISBN = bookID;
+    //get the id
+    $.ajax({
+      url: "/getID",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: userEmail }),
+      success: function(response) {
+          response.results.forEach(element => {
+            console.log(typeof element);
+            userID = element.id;
+          });
+      }, 
+      complete: function(){
+        console.log(bookISBN);
+        console.log(userID);
+    
+    
+        //use the userID to add the books isbn to the database.
+        $.ajax({
+          url: "/cart",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ userid: userID, isbn: bookISBN }),
+          success: function(response) {
+           console.log("RESPONSE" + response);
+          },
+        });
+      },
+    });
+
+  }
+    
+
+  function addToWishlist(){
+    
+  }
 
 
   function displayNoData(){

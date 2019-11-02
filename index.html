@@ -323,7 +323,7 @@
       </div>
     </div>
 
-    <!-- This is a popup telling the user that login was successfull -->
+    <!-- This is a popup telling the user that login was unsuccessfull -->
     <div class="modal" tabindex="-1" role="dialog" id="failedLogin">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -345,6 +345,8 @@
       </div>
     </div>
 
+   
+
     <!-- Top Image -->
     <div class="jumbotron">
       <h1 class="display-4">Welcome!</h1>
@@ -355,7 +357,6 @@
       <div class="horizontalList" id="card1"></div>
   
       <!-- this is not used rn -->
-    
       <div class="col-sm-12" id="card2">
           <div class="card mb-4">
             <div class="card-body text-center">
@@ -365,6 +366,47 @@
             </div>
           </div>
       </div>
+
+       <!-- this is a popup that shows a loading animation -->
+    <div class="modal fade bd-example-modal-sm" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Were Working on your request.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="justify-content: center;">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- this is a modal to show that the search request was unsuccessfull  -->
+    <div class="modal" tabindex="-1" role="dialog" id="noSearch">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Opps Something went wrong</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="justify-content: center;">
+            <p>Cannot preform search request. Please Refresh and try again</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer image that links to scrolls to top -->
     <div class="jumbotron1" style="background-color: #1a5672;">

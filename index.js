@@ -21,6 +21,29 @@ express()
   .get('/', (req, res) => res.render('index'))
   //this is the call to a second webpage.
   .get('/search', (req, res) => res.sendFile('./Pages/searchBooks.html', {root: __dirname}))
+  //call to get the ID primary key within the user_accounts - allowing forign key us in other tables
+  .post('/getID', async function (req, res) {
+    console.log("Getting the ID");
+    var loginEmail = req.body.email;
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        `SELECT id FROM user_accounts where email='${loginEmail}'`
+      );
+      const results = { results: result ? result.rows : null };
+      console.log(results);
+      if(results === null){
+        //bad request - the email is not within the database
+        res.sendStatus(400); 
+        client.release();
+      }
+      res.status(200).send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
   //call to get the users firstname
   .post('/getName', async function (req, res) {
     var loginEmail = req.body.email;
@@ -30,6 +53,11 @@ express()
         `SELECT firstname FROM user_accounts where email='${loginEmail}'`
       );
       const results = { results: result ? result.rows : null };
+      if(results === null){
+        //bad request - the email is not within the database
+        res.sendStatus(400); 
+        client.release();
+      }
       res.status(200).send(results);
       client.release();
     } catch (err) {
@@ -87,7 +115,9 @@ express()
       res.send("Error " + err);
     }
   })
-  /* This POST function will first check to see if the given email is already in the database. */
+  /* This is the post request used for accoutn creation. It verifies that an email is not already
+  exisiting within the database. It Creates a salt and hashes the users password - and stores all user information
+  into the user_accounts database.*/
   .post("/create", async function (req, res) { //this call is successfully adding to the database.
     var firstName = req.body.firstname;
     var lastName = req.body.lastname;
@@ -141,4 +171,55 @@ express()
       res.send("Error " + err);
     }
   })  
+  /* This is the POST request that updates the wishlist database. This stores the ID of the 
+  user_account associated to the books they have entered into their wishlist */
+  .post('/wishlist', async function (req, res) {
+    var userID = res.body.id;
+    var wishlistISBN = res.body.isbn;
+
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        `INSERT INTO wishlist (id, isbn) VALUES('${userID}', '${wishlistISBN}')returning *`
+      );
+      const results = { results: result ? result.rows : null };
+      if(results === null){
+        //bad request - the email is not within the database
+        res.sendStatus(400); 
+        client.release();
+      }
+      res.status(200).send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
+
+  /* This is the POST request that updates the cart database. This stores the ID of the 
+  user_account associated to the books they have entered into their cart */
+  .post('/cart', async function (req, res) {
+    console.log("updating the cart database");
+    var userID = req.body.userid;
+    var wishlistISBN = req.body.isbn;
+    
+    console.log(typeof userID);
+    console.log(userID);
+    console.log(wishlistISBN);
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        `INSERT INTO cart (id, isbn) VALUES('${userID}', '${wishlistISBN}') returning *`
+      );
+      const results = { results: result ? result.rows : null };
+      console.log(results);
+      res.status(200).send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
+
+
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
