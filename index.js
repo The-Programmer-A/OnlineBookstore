@@ -174,8 +174,9 @@ express()
   /* This is the POST request that updates the wishlist database. This stores the ID of the 
   user_account associated to the books they have entered into their wishlist */
   .post('/wishlist', async function (req, res) {
-    var userID = res.body.id;
-    var wishlistISBN = res.body.isbn;
+    console.log("updating the wishlist database");
+    var userID = req.body.userid;
+    var wishlistISBN = req.body.isbn;
 
     try {
       const client = await pool.connect();
@@ -183,11 +184,6 @@ express()
         `INSERT INTO wishlist (id, isbn) VALUES('${userID}', '${wishlistISBN}')returning *`
       );
       const results = { results: result ? result.rows : null };
-      if(results === null){
-        //bad request - the email is not within the database
-        res.sendStatus(400); 
-        client.release();
-      }
       res.status(200).send(results);
       client.release();
     } catch (err) {
@@ -203,9 +199,6 @@ express()
     var userID = req.body.userid;
     var wishlistISBN = req.body.isbn;
     
-    console.log(typeof userID);
-    console.log(userID);
-    console.log(wishlistISBN);
     try {
       const client = await pool.connect();
       const result = await client.query(

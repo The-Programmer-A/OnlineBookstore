@@ -375,31 +375,26 @@ $(document).ready(function(e) {
     console.log(userEmail)
     /* this will be adding isbn into the cart database */
     $("#cart0").click(function() {
-      console.log("adding to cart");
       addToCart(newData.items[0].id);
       return;
     });
 
     $("#cart1").click(function() {
-      console.log("adding to cart");
       addToCart(newData.items[1].id);
       return;
     });
 
     $("#cart2").click(function() {
-      console.log("adding to cart");
       addToCart(newData.items[2].id);
       return;
     });
 
     $("#cart3").click(function() {
-      console.log("adding to cart");
       addToCart(newData.items[3].id);
       return;
     });
 
     $("#cart4").click(function() {
-      console.log("adding to cart");
       addToCart(newData.items[4].id);
       return;
     });
@@ -407,27 +402,27 @@ $(document).ready(function(e) {
     /* This is adding the selected books ISBN into the wishlist database */
 
     $("#wishlist0").click(function() {
-      console.log(newData.items[0].volumeInfo.authors);
+      addToWishlist(newData.items[0].id);
       return;
     });
 
     $("#wishlist1").click(function() {
-      console.log(newData.items[1].volumeInfo.authors);
+      addToWishlist(newData.items[1].id);
       return;
     });
 
     $("#wishlist2").click(function() {
-      console.log(newData.items[2].volumeInfo.authors);
+      addToWishlist(newData.items[2].id);
       return;
     });
 
     $("#wishlist3").click(function() {
-      console.log(newData.items[3].volumeInfo.authors);
+      addToWishlist(newData.items[3].id);
       return;
     });
 
     $("#wishlist4").click(function() {
-      console.log(newData.items[4].volumeInfo.authors);
+      addToWishlist(newData.items[4].id);
       return;
     });
     return;
@@ -439,7 +434,6 @@ $(document).ready(function(e) {
       console.log("You must be signed in to purchase books");
       return;
     }
-    console.log("in the process of adding to cart");
     var userID = 0;
     var bookISBN = bookID;
     //get the id
@@ -455,28 +449,58 @@ $(document).ready(function(e) {
           });
       }, 
       complete: function(){
-        console.log(bookISBN);
-        console.log(userID);
-    
-    
-        //use the userID to add the books isbn to the database.
+        //use the id of active user and the isbn to populate database. 
         $.ajax({
           url: "/cart",
           method: "POST",
           contentType: "application/json",
           data: JSON.stringify({ userid: userID, isbn: bookISBN }),
           success: function(response) {
-           console.log("RESPONSE" + response);
+           console.log("RESPONSE" + JSON.stringify(response));
+           //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
+           //else return to the user that something went wrong.
           },
         });
       },
     });
-
   }
     
 
-  function addToWishlist(){
-    
+  function addToWishlist(bookID){
+    if(userEmail.length < 1){
+      //show popup that tells the user to login before they add to cart
+      console.log("You must be signed in to purchase books");
+      return;
+    }
+    var userID = 0;
+    var bookISBN = bookID;
+    //get the id
+    $.ajax({
+      url: "/getID",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: userEmail }),
+      success: function(response) {
+          response.results.forEach(element => {
+            console.log(typeof element);
+            userID = element.id;
+          });
+      }, 
+      complete: function(){
+        //use the id of active user and the isbn to populate database. 
+        $.ajax({
+          url: "/wishlist",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ userid: userID, isbn: bookISBN }),
+          success: function(response) {
+           console.log("RESPONSE" + JSON.stringify(response));
+           //if successfull - show user message to say it was added to cart. Give them the option to view there cart, or keep shopping
+           //else return to the user that something went wrong.
+          },
+        });
+      },
+    });
   }
 
 
