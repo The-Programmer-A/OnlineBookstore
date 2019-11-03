@@ -362,16 +362,31 @@
 
     <!-- Cards that will hold GoogleBookAPI Information -->
       <div class="horizontalList" id="card1"></div>
-  
-      <!-- this is not used rn -->
-      <div class="col-sm-12" id="card2">
-          <div class="card mb-4">
-            <div class="card-body text-center">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title</p>
-              <a href="#" class="card-link">Another link</a>
+
+
+    <!-- Cards that will hold Suggestion Information -->
+      <div class="horizontalList1" id="card00"></div>
+
+       <!-- this is a loading card to suggest that something will be there on the page soon (for newest books) -->
+      <div class="col-sm-13" id="loadingcard">
+        <div class="card mb-4">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
           </div>
+        </div>
+      </div>
+  
+     <!-- this is a loading card to suggest that something will be there on the page soon (for suggested books) -->
+      <div class="col-sm-12" id="loadingcard2">
+          <!-- <div class="card mb-4">
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div> -->
       </div>
 
        <!-- this is a popup that shows a loading animation -->
@@ -414,6 +429,26 @@
         </div>
       </div>
     </div>
+
+     <!-- this is a modal to show that the search request was unsuccessfull  -->
+     <div class="modal" tabindex="-1" role="dialog" id="noSearch1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+          <h5 class="modal-title">Opps Something went wrong</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="justify-content: center;">
+          <p>Cannot preform search request. Please Refresh and try again</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- this is a modal to show that the user must be signed in to add books to their cart/wishlist -->
     <div class="modal" tabindex="-1" role="dialog" id="mustbesignedin">

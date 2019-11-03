@@ -3,6 +3,7 @@ $(document).ready(function(e) {
 
     var wishlistData;
     function loadData(){
+        $("#loadingModal").modal("show");
         wishlistData = localStorage.getItem("_wishlist");
         if(!wishlistData){
             console.log("no wishlist data");
@@ -33,15 +34,17 @@ $(document).ready(function(e) {
                     console.log(currentBookData);
                 },
                 error: function(errorThrown) {
-                  console.log("hey were in an error" + JSON.stringify(errorThrown));
-                  $("#modal1").modal("show");
+                    $("#loadingModal").modal("hide");
+                    $("#modal1").modal("show");
+                    console.log("hey were in an error" + JSON.stringify(errorThrown));
                 },
                 complete: function() {
+                    $("#loadingModal").modal("hide");
                     var aaa = $("<a/>")
                         .addClass("list-group-item list-group-item-action")
                         .attr("href", "#")
                         .attr("id", [i])
-                        .attr("style", "margin:0px auto; align-items:center; justify-content: center")
+                        .attr("style", "margin:0px auto; align-items:center; justify-content")
                         .appendTo(cList);
 
                     var div = $("<div/>")
@@ -56,7 +59,7 @@ $(document).ready(function(e) {
                     var para = $("<img/>")
                         .attr("src", currentBookData.items[0].volumeInfo.imageLinks.thumbnail)
                         .attr("id", "thumbnail")
-                        .appendTo(aaa);
+                        .appendTo(div);
 
                     var small = $("<small/>")
                         .text(currentBookData.items[0].volumeInfo.authors)
@@ -82,4 +85,7 @@ $(document).ready(function(e) {
     .click(function(){
       $(location).attr("href", "http://localhost:5000/?#");
   })
+
+
+
 });
