@@ -267,41 +267,6 @@ $(document).ready(function(e) {
   $("#Home1")
     .click(function(){
       $(location).attr("href", "http://localhost:5000/?#");
-    })
+  })
   
-    /*
-      This is the functionality of the searchBar
-      */
-  $("#searchBtn2").click(function() {
-      //take the input from the searchBar and use it
-      var searchInput = $("#searchBar2").val(); //query the API and display the results
-      console.log(searchInput);
-      var errorFlag = false;
-      var apiData = null;
-  
-      $.ajax({
-        url: "https://www.googleapis.com/books/v1/volumes?q=" + searchInput,
-        dataType: "json",
-        success: function(data) {
-          //send the JSON data from API
-          console.log(data);
-          data = data;
-        },
-        error: function(errorThrown) {
-          console.log("hey were in an error" + JSON.stringify(errorThrown));
-          errorFlag = true;
-          return;
-        },
-        complete: function() {
-          if (errorFlag) {
-            console.log("something went wrong");
-            return;
-          }
-          $("#searchBar").val("");
-          console.log(data);
-          displayData(data);
-        },
-        type: "GET"
-    });
-  });
 });

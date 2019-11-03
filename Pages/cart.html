@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My OnlineBookStore</title>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://kit.fontawesome.com/4f9f01ee09.js" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <!-- This allows the bookstore.js to link with index.html -->
+    <script src="../Controllers/cartController.js"></script>
+
+</head>
+
+
+
+<body>
+
+    <div class="container">
+        <!-- Header Navigation bar + Search box -->
+        <nav class="navbar navbar-dark" style="background-color: #0b4269;" justify-content-between>
+            <div class="header1" style="color: aliceblue;">
+                <h2> BookStore Search Results </h2>
+            </div>
+            <!-- <form class="form-inline">
+                    <input class="form-control mr-sm-2" id="searchBar2" type="search" placeholder="Looking for something"
+                      aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchBtn2">Search</button>
+            </form> -->
+        </nav>
+
+        <ul class="nav justify-content-center"  style="background-color: #156b92;">
+            <li >
+                <a class="nav-link active" href="#" id="Home1" style="color: #f8f8f8; justify-content: center;"> <i
+                        class="fas fa-home"></i>Home</a>
+            </li>
+        </ul>
+
+        <!-- show the information of the cart -->
+        <div class="list-group"></div>
+
+        <!-- this is a modal to show an error -->
+        <div class="modal" tabindex="-1" role="dialog" id="modal1">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Oops, Something went wrong</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Unfortunatly we were unable to reach our servers. Please refresh and try again.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+</body>
+
+</html>

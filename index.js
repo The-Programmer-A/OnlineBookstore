@@ -21,9 +21,12 @@ express()
   .get('/?', (req, res) => res.render('index'))
   //this is the call to a second webpage.
   .get('/search', (req, res) => res.sendFile('./Pages/searchBooks.html', {root: __dirname}))
+  //this is a call to the wishlist page
+  .get('/wishlistPage', (req, res) => res.sendFile('./Pages/wishlist.html', {root: __dirname}))
+  //this is a call to the cart page
+  .get('/cartPage', (req, res) => res.sendFile('./Pages/cart.html', {root: __dirname}))
   //call to get the ID primary key within the user_accounts - allowing forign key us in other tables
   .post('/getID', async function (req, res) {
-    console.log("Getting the ID");
     var loginEmail = req.body.email;
     try {
       const client = await pool.connect();
@@ -31,7 +34,6 @@ express()
         `SELECT id FROM user_accounts where email='${loginEmail}'`
       );
       const results = { results: result ? result.rows : null };
-      console.log(results);
       res.status(200).send(results);
       client.release();
     } catch (err) {
@@ -169,7 +171,6 @@ express()
   /* This is the POST request that updates the wishlist database. This stores the ID of the 
   user_account associated to the books they have entered into their wishlist */
   .post('/wishlist', async function (req, res) {
-    console.log("updating the wishlist database");
     var userID = req.body.userid;
     var wishlistISBN = req.body.isbn;
 
@@ -194,7 +195,6 @@ express()
   /* This is the POST request that updates the cart database. This stores the ID of the 
   user_account associated to the books they have entered into their cart */
   .post('/cart', async function (req, res) {
-    console.log("updating the cart database");
     var userID = req.body.userid;
     var wishlistISBN = req.body.isbn;
     
@@ -208,7 +208,6 @@ express()
         res.status(200).send(false);
         client.release();
       }
-      console.log(results);
       res.status(200).send(results);
       client.release();
     } catch (err) {
@@ -218,7 +217,6 @@ express()
   })
   //call to get all information from the wishlist database
   .post('/wishlistInfo', async function (req, res) {
-    console.log("obtaining info from wishlist database");
     var userID = req.body.userid;
 
     try {
@@ -240,7 +238,6 @@ express()
   })
   //call to get all information from the cart database
   .post('/cartInfo', async function (req, res) {
-    console.log("obtaining info from cart database");
     var userID = req.body.userid;
 
     try {

@@ -96,7 +96,7 @@ $(document).ready(function(e) {
           success: function(response) {
            console.log("RESPONSE" + JSON.stringify(response));
             var wishlistInfo = [];
-            //store all this information locally in an array - send it to another page. 
+            
             wishlistInfo = response.results;
 
             wishlistInfo.forEach(element => {
@@ -105,9 +105,16 @@ $(document).ready(function(e) {
 
             //this is how to obtain the information of the wishlist info.
             console.log(wishlistInfo[0].id + " " + wishlistInfo[0].isbn);
+
+            //store all this information locally in an array - send it to another page. 
+            wishlistInfo = JSON.stringify(wishlistInfo);
+            wishlistInfo = btoa(unescape(encodeURIComponent(wishlistInfo)));
+            localStorage.setItem("_wishlist", wishlistInfo);
           },
           complete: function(){
             console.log("wishlist info gained");
+            //move the the new page.
+            $(location).attr("href", "http://localhost:5000/wishlistPage"); 
           },
         });
       },
@@ -139,7 +146,7 @@ $(document).ready(function(e) {
           success: function(response) {
            console.log("RESPONSE" + JSON.stringify(response));
            var cartInfo = [];
-            //store all this information locally in an array - send it to another page. 
+            
             cartInfo = response.results;
 
             cartInfo.forEach(element => {
@@ -148,9 +155,15 @@ $(document).ready(function(e) {
 
             //this is how to obtain the information of the wishlist info.
             console.log(cartInfo[0].id + " " + cartInfo[0].isbn);
+            //store all this information locally in an array - send it to another page. 
+            cartInfo = JSON.stringify(cartInfo);
+            cartInfo = btoa(unescape(encodeURIComponent(cartInfo)));
+            localStorage.setItem("_cartInfo", cartInfo);
           },
           complete: function(){
             console.log("cart info gained");
+            //move to the next page
+            $(location).attr("href", "http://localhost:5000/cartPage"); 
           },
         });
       },
