@@ -186,6 +186,7 @@
                   console.log('Last Name: ' + profile.getFamilyName());
                   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
+                  console.log("profile" + profile);
                   $.ajax({
                     //requesting to post the data
                     url: "/create",
