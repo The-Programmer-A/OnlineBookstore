@@ -186,8 +186,33 @@
                   console.log('Last Name: ' + profile.getFamilyName());
                   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-
-                  
+                  $.ajax({
+                    //requesting to post the data
+                    url: "/create",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                      firstname: profile.getGivenName(),
+                      lastname:  profile.getFamilyName(),
+                      email: profile.getEmail(),
+                      zip: 0,
+                      city: 0,
+                      address: 0,
+                      password: 0
+                    }), //send the data to the service
+                    success: function (response) {
+                      //if the email is already in the database
+                      if (response === true) {
+                        $("#emailInUse").modal("show");
+                        return;
+                      }
+                      //else the account was created and inserted into the database.
+                      console.log("account created successfully");
+                      $("#registerModal").modal("hide");
+                      $("#createdAccountConfirmation").modal("show");
+                      resetCreateAccount();
+                    }
+                  });
                 }
               </script>
               <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
