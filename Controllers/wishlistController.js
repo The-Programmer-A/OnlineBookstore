@@ -81,6 +81,168 @@ $(document).ready(function(e) {
         }
     }
 
+    //herlper variable to obtain the items within the modal.
+  var modal = $("div.modal");
+  $(".list-group-item").click(function() {
+    selectedItem = $(this).attr("id");
+
+    var div = $("<div/>")
+      .addClass("modal-dialog")
+      .attr("role", "document")
+      .appendTo(modal);
+
+    var div1 = $("<div/>")
+      .addClass("modal-content")
+      .appendTo(div);
+
+    var div2 = $("<div/>")
+      .addClass("modal-header")
+      .appendTo(div1);
+
+    var h4 = $("<h4/>")
+      .addClass("modal-title")
+      .text(data.items[selectedItem].volumeInfo.title)
+      .appendTo(div2);
+
+    var div3 = $("<div/>")
+      .addClass("modal-body")
+      .appendTo(div1);
+
+    var division = $("<div/>")
+      .attr("style", "margin:0px auto; text-align:center")
+      .appendTo(div3);
+
+    var modalBody = $("<p/>")
+      .text("Authors: " + data.items[selectedItem].volumeInfo.authors)
+      .appendTo(division);
+
+    var image = $("<img/>")
+      .attr("src", data.items[selectedItem].volumeInfo.imageLinks.thumbnail)
+      .attr("style", "justify-content: center")
+      .appendTo(division);
+
+    var modalBody = $("<p/>")
+      .text(
+        "Publish Date: " + data.items[selectedItem].volumeInfo.publishedDate
+      )
+      .appendTo(division);
+
+    var modalBody2 = $("<p/>")
+      .text("Rating: " + data.items[selectedItem].volumeInfo.ratingsCount)
+      .appendTo(division);
+
+    var btn2 = $("<button/>")
+      .addClass("btn btn-dark btn-lg btn-block")
+      .attr("id", "remove")
+      .text("Remove from Wishlist")
+      .appendTo(division);
+
+    var btn3 = $("<button/>")
+      .addClass("btn btn-dark btn-lg btn-block")
+      .attr("id", "cart")
+      .text("Add to Cart")
+      .appendTo(division);
+
+    var div4 = $("<div/>")
+      .addClass("modal-footer")
+      .appendTo(div1);
+
+    var btn1 = $("<button/>")
+      .addClass("btn btn-secondary")
+      .attr("data-dismiss", "modal")
+      .text("Close")
+      .appendTo(div4);
+
+    $("#details").modal("show");
+    console.log("you clicked: " + $(this).attr("id"));
+    
+    //inner functions of the selected items buttons.
+    $("#cart").click(function() {
+      console.log("cart clicked");
+      if(email === null){
+        console.log("need to be logged in");
+        return;
+      }
+      var userEmail = email;
+      var clickedISBN = data.items[selectedItem].id;
+      var userID = -1;
+      $.ajax({
+        url: "/getID",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: userEmail }),
+        success: function(response){
+            response.results.forEach(element => {
+              console.log(typeof element);
+              userID = element.id;
+            });
+        }, 
+        complete: function(){
+          //use the id of active user and the isbn to populate database. 
+          $.ajax({
+            url: "/cart",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ userid: userID, isbn: clickedISBN }),
+            success: function(response) {
+             if(response === false){
+               //do nothing
+             }else{
+              $("#details").modal("hide");
+             }
+            },
+          });
+        },
+      });
+    });
+
+    $("#remove").click(function() {
+      console.log("remove clicked");
+      var userEmail = email;
+      var clickedISBN = data.items[selectedItem].id;
+      var userID = 0;
+      $.ajax({
+        url: "/getID",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ email: userEmail }),
+        success: function(response) {
+            response.results.forEach(element => {
+              console.log(typeof element);
+              userID = element.id;
+            });
+        }, 
+        complete: function(){
+          //use the id of active user and the isbn to populate database. 
+          $.ajax({
+            url: "/removefromwishlist", //create this.
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ userid: userID, isbn: clickedISBN }),
+            success: function(response) {
+             console.log("RESPONSE" + JSON.stringify(response));
+             if(response === false){
+              //do nothing
+             }else{
+              $("#details").modal("hide");
+             }
+            },
+            error: function(errorThrown) {
+              console.log("hey were in an error" + JSON.stringify(errorThrown));
+              return;
+            },
+          });
+        },
+      });
+    });
+  });
+
+  //this is required to rest the modal list
+  $(".modal").on("hidden.bs.modal", function() {
+    $(".modal").html("");
+  });
+
+
     $("#Home1")
     .click(function(){
       $(location).attr("href", "http://localhost:5000/?#");
