@@ -73,17 +73,11 @@ $(document).ready(function (e) {
             .addClass("fas fa-heart")
             .appendTo(div);
 
-            getData(currentBookData);
+            //getData(currentBookData);
         },
         type: "GET"
       });
-
     }
-  }
-
-  //herlper variable to obtain the items within the modal.
-  function getData(data) {
-
 
     var modal = $("div.modal1");
     $(".list-group-item").click(function () {
@@ -241,6 +235,11 @@ $(document).ready(function (e) {
         });
       });
     });
+  }
+
+  //herlper variable to obtain the items within the modal.
+  function getData(data) {
+    
   }
 
   //this is required to rest the modal list
