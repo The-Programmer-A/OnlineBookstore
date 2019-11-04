@@ -7,7 +7,7 @@
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
 
-  <script src ="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 
   <script src="https://kit.fontawesome.com/4f9f01ee09.js" crossorigin="anonymous"></script>
 
@@ -27,7 +27,8 @@
     crossorigin="anonymous"></script>
 
   <!-- Implements google log in -->
-  <meta name="google-signin-client_id" content="503350489698-o8hnn6r0hrus0bj9q6i6ecf33s1crp8h.apps.googleusercontent.com">
+  <meta name="google-signin-client_id"
+    content="503350489698-o8hnn6r0hrus0bj9q6i6ecf33s1crp8h.apps.googleusercontent.com">
   <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   <!-- This allows the bookstore.js to link with index.html -->
@@ -72,11 +73,11 @@
       left: 5px;
     }
 
-    .registerModal{
+    .registerModal {
       overflow-y: initial !important
     }
 
-    .modal-body{
+    .modal-body {
       max-height: calc(100vh - 200px);
       overflow-y: auto;
     }
@@ -128,7 +129,16 @@
               <a class="dropdown-item" id="opHistory" href="#">Order/Purchase History</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#" id="logout">Logout </a>
+              <a class="dropdown-item" onclick="signOut();">Sign out of Google</a>
             </div>
+            <script>
+              function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                  console.log('User signed out.');
+                });
+              }
+            </script>
           </li>
           <li class="nav-item">
             <a id="Wishlist" class="nav-link" href="#">Wishlist</a>
@@ -169,20 +179,13 @@
               <div class="g-signin2" data-onsuccess="onSignIn"></div>
               <script>
                 function onSignIn(googleUser) {
-                var profile = googleUser.getBasicProfile();
-                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-                console.log('Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
-                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-                }
-              </script>
-              <a href="#" onclick="signOut();">Sign out</a>
-              <script>
-                function signOut() {
-                  var auth2 = gapi.auth2.getAuthInstance();
-                  auth2.signOut().then(function () {
-                    console.log('User signed out.');
-                  });
+                  var profile = googleUser.getBasicProfile();
+                  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                  console.log('Name: ' + profile.getName());
+                  console.log('Image URL: ' + profile.getImageUrl());
+                  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+
                 }
               </script>
               <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
@@ -310,25 +313,25 @@
 
     <!-- this pop up tells the user that the email is already in the database -->
     <div class="modal" tabindex="-1" role="dialog" id="emailInUse">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Oops, Something went wrong!</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>It looks like the email you have entered is already in the database.<br></p>
-              <p style="text-align: left;">Click here to login! <a href="#" id="back2Login2">Login</a></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Oops, Something went wrong!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>It looks like the email you have entered is already in the database.<br></p>
+            <p style="text-align: left;">Click here to login! <a href="#" id="back2Login2">Login</a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
-  
+    </div>
+
 
     <!-- This is a popup telling the user that login was successfull -->
     <div class="modal" tabindex="-1" role="dialog" id="successLogin">
@@ -375,7 +378,7 @@
       </div>
     </div>
 
-   
+
 
     <!-- Top Image -->
     <div class="jumbotron">
@@ -384,36 +387,37 @@
     </div>
 
     <!-- Cards that will hold GoogleBookAPI Information -->
-      <div class="horizontalList" id="card1"></div>
+    <div class="horizontalList" id="card1"></div>
 
 
     <!-- Cards that will hold Suggestion Information -->
-      <div class="horizontalList1" id="card00"></div>
+    <div class="horizontalList1" id="card00"></div>
 
-       <!-- this is a loading card to suggest that something will be there on the page soon (for newest books) -->
-      <div class="col-sm-13" id="loadingcard">
-        <div class="card mb-4">
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
+    <!-- this is a loading card to suggest that something will be there on the page soon (for newest books) -->
+    <div class="col-sm-13" id="loadingcard">
+      <div class="card mb-4">
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
       </div>
-  
-     <!-- this is a loading card to suggest that something will be there on the page soon (for suggested books) -->
-      <div class="col-sm-12" id="loadingcard2">
-          <!-- <div class="card mb-4">
+    </div>
+
+    <!-- this is a loading card to suggest that something will be there on the page soon (for suggested books) -->
+    <div class="col-sm-12" id="loadingcard2">
+      <!-- <div class="card mb-4">
             <div class="d-flex justify-content-center">
               <div class="spinner-border" role="status">
                 <span class="sr-only">Loading...</span>
               </div>
             </div>
           </div> -->
-      </div>
+    </div>
 
-       <!-- this is a popup that shows a loading animation -->
-    <div class="modal fade bd-example-modal-sm" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <!-- this is a popup that shows a loading animation -->
+    <div class="modal fade bd-example-modal-sm" id="loadingModal" tabindex="-1" role="dialog"
+      aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -435,9 +439,9 @@
 
     <!-- this is a modal to show that the search request was unsuccessfull  -->
     <div class="modal" tabindex="-1" role="dialog" id="noSearch">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
             <h5 class="modal-title">Opps Something went wrong</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
@@ -453,25 +457,25 @@
       </div>
     </div>
 
-     <!-- this is a modal to show that the search request was unsuccessfull  -->
-     <div class="modal" tabindex="-1" role="dialog" id="noSearch1">
+    <!-- this is a modal to show that the search request was unsuccessfull  -->
+    <div class="modal" tabindex="-1" role="dialog" id="noSearch1">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-          <h5 class="modal-title">Opps Something went wrong</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" style="justify-content: center;">
-          <p>Cannot preform search request. Please Refresh and try again</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <h5 class="modal-title">Opps Something went wrong</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="justify-content: center;">
+            <p>Cannot preform search request. Please Refresh and try again</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <!-- this is a modal to show that the user must be signed in to add books to their cart/wishlist -->
     <div class="modal" tabindex="-1" role="dialog" id="mustbesignedin">
@@ -485,8 +489,8 @@
           </div>
           <div class="modal-body">
             <p style="text-align: center;">You must be signed in to add books to your Wishlist or Cart.</p>
-            <p style="text-align: center;"><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
-              id="registerLink2">Create Account</a></p> 
+            <p style="text-align: center;"><br>Don't have an account with us? <a href="#" data-toggle="modal"
+                data-target="#registerModal" id="registerLink2">Create Account</a></p>
             <p style="text-align: center;">Already have an account with us? <a href="#" id="back2Login3">Login</a></p>
           </div>
           <div class="modal-footer">
@@ -539,24 +543,25 @@
     </div>
 
     <!-- this is a modal to show that addition to the cart/wishlist was unsuccessfull -->
-      <div class="modal fade bd-example-modal-sm" id="wishlistcartNot" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Opps, Something went wrong</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Unfortunatly, we were unable to process that request. Please try again later</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+    <div class="modal fade bd-example-modal-sm" id="wishlistcartNot" tabindex="-1" role="dialog"
+      aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Opps, Something went wrong</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Unfortunatly, we were unable to process that request. Please try again later</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- Footer image that links to scrolls to top -->
     <div class="jumbotron1" style="background-color: #1a5672;">
