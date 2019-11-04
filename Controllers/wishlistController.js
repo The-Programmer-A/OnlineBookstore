@@ -31,7 +31,6 @@ $(document).ready(function(e) {
                 success: function(data) {
                   //send the JSON data from API
                     currentBookData = data;
-                    console.log(currentBookData);
                 },
                 error: function(errorThrown) {
                     $("#loadingModal").modal("hide");
@@ -81,11 +80,13 @@ $(document).ready(function(e) {
         }
     }
 
-    //herlper variable to obtain the items within the modal.
+  //herlper variable to obtain the items within the modal.
   var modal = $("div.modal");
+
   $(".list-group-item").click(function() {
     selectedItem = $(this).attr("id");
-
+    console.log(selectedItem);
+    
     var div = $("<div/>")
       .addClass("modal-dialog")
       .attr("role", "document")
@@ -154,6 +155,7 @@ $(document).ready(function(e) {
       .appendTo(div4);
 
     $("#details").modal("show");
+
     console.log("you clicked: " + $(this).attr("id"));
     
     //inner functions of the selected items buttons.
@@ -247,7 +249,5 @@ $(document).ready(function(e) {
     .click(function(){
       $(location).attr("href", "http://localhost:5000/?#");
   })
-
-
 
 });

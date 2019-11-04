@@ -26,9 +26,15 @@
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
 
+  <!-- Implements google log in -->
+  <meta name="google-signin-client_id" content="503350489698-lnpssfnf5v7997jm9fdcae38a5ep4hi5.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
   <!-- This allows the bookstore.js to link with index.html -->
   <script src="./Controllers/bookstore.js"></script>
   <script src="./Services/UserService.js"></script>
+
+
 
   <!-- turn this into a bookstore.css file later -->
   <style type="text/css">
@@ -160,8 +166,25 @@
                   </div>
                 </div>
               </form>
-              <button type="button" class="btn btn-light btn-lg btn-block" id="GoogleSignIn">Sign in With
-                Google</button>
+              <div class="g-signin2" data-onsuccess="onSignIn"></div>
+              <script>
+                function onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+                }
+              </script>
+              <a href="#" onclick="signOut();">Sign out</a>
+              <script>
+                function signOut() {
+                  var auth2 = gapi.auth2.getAuthInstance();
+                  auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                  });
+                }
+              </script>
               <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
                   id="registerLink">Create
                   Account</a></p>
