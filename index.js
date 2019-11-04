@@ -112,6 +112,29 @@ express()
       res.send("Error " + err);
     }
   })
+
+  /* this is a Login for OAuth users */
+  .post("/loginOAuth", async function (req, res) {
+    //obtain the email and the password.
+    var loginEmail = req.body.email;
+
+  try {
+    const client = await pool.connect();
+    const result = await client.query(`SELECT firstname FROM user_accounts where email='${loginEmail}'`);
+    const results = { results: result ? result.rows : null }; 
+
+    if(results.results.length == 0){
+      res.status(200).send(false);
+      client.release();
+      return;
+    }
+    res.status(200).send(results);
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+})
   /* This is the post request used for accoutn creation. It verifies that an email is not already
   exisiting within the database. It Creates a salt and hashes the users password - and stores all user information
   into the user_accounts database.*/

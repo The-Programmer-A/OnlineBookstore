@@ -189,6 +189,32 @@
 
                   if(profile != null){
                     console.log("already logged in ");
+                    $.ajax({
+                      url: "/loginOAuth",
+                      method: "POST",
+                      contentType: "application/json",
+                      data: JSON.stringify({ email: profile.getEmail() }),
+                      success: function (response) {
+                        if (response === false) {
+                          console.log("Failed to authenticate with google");
+                          $("#failedLogin").modal("show");
+                        } else {
+                          //the password is correct
+                          console.log(response);
+                          var firstName = null;
+                          response.results.forEach(element => {
+                            firstName = element.firstname;
+                          });
+                          $("#loginModal").modal("hide");
+                          $("#uservalue").html("Welcome " + firstName); //injects the firstName into the HTML
+                          $("#navbar1").hide();
+                          $("#navbar2").show();
+                          $("#header2").hide();
+                          $("#header1").show();
+                          userLogged = true;
+                        }
+                      }
+                    });
                     return;
                   }
 
