@@ -182,10 +182,12 @@
                   var profile = googleUser.getBasicProfile();
                   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
                   console.log('Name: ' + profile.getName());
-                  console.log('Image URL: ' + profile.getImageUrl());
+                  console.log('First Name: ' + profile.getGivenName());
+                  console.log('Last Name: ' + profile.getFamilyName());
                   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
 
+                  
                 }
               </script>
               <p><br>Don't have an account with us? <a href="#" data-toggle="modal" data-target="#registerModal"
