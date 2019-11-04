@@ -187,7 +187,7 @@
                   console.log('Last Name: ' + profile.getFamilyName());
                   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-                  if(profile === null){
+                  if(profile != null){
                     console.log("already logged in ");
                     return;
                   }
