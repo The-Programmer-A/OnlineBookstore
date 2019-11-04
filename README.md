@@ -1,39 +1,25 @@
-# node-js-getting-started
+## How to use the system:  
+Our application is an E-Commerce bookstore website hosted on a Heroku server which is connected to a Postgresql Database. Our application uses a RESTful server and the Google Books API to obtain service and book information, enabling the website to achieve its functionality. Users are able to register/signup with either a local system account, or be authenticated through their google accounts using OAuth. To use the system users are able to view the link: https://afternoon-crag-26447.herokuapp.com.
+The functionality offered by the RESTful Interface is as follows:  
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+* Create account  
+* Login  
+* Search Books  
+* View Newest Releases  
+* View Suggestions  
+* Add Books to Cart   
+* Add Books to Watchlist  
+* Logout
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+## What error handling has been implemented into the system:
+Validation and error handling has been implemented through every area of the system that in which ambiguity to the user can occur. Functions that result in multiple execution branches - such as logging; can either be a fail or success - are handled in such a way that the user is not unaware of what is occurring. Shown below is an example of login error handling - all cases are defined in the use cases (1.5).
 
-## Running Locally
+Example of Success:  ![](./DocumentationImages/screenshot1.png)  
+Example of Failure - wrong password:  ![](./DocumentationImages/screenshot2.png)  
+Each of these errors are handled through the evaluation of the response obtained by the RESTFul service. This means that the processing of errors is done at the server side it , dependant on the outcome of the response received by the server different information is shown to the client browser. For example, following the same logging in example discussed above, we can see how the different outcomes are a result of server side evaluations: We are able to see that the outcomes of evaluating the hashed passwords, results in different information being sent to the RESTful resource thus resulting in different information being displayed to the user. Evaluating information at the server side increases the security of the application as the additional abstraction results in information being harder to obtain by potential attackers. These error handling principles outlined in this example of the login functionality is followed by each major function within the application. For more details - refer to git or 1.5 use cases.  ![](./DocumentationImages/screenshot3.png)
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
 
-```sh
-$ git clone https://github.com/heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
+  
+  
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
 
-## Deploying to Heroku
-
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Node.js on Heroku, see these Dev Center articles:
-
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)

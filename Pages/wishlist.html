@@ -62,15 +62,15 @@
         <!-- show the information of the wishlist -->
         <div class="list-group"></div>
 
-        <!-- create a modal allowing too add a book to cart/watchlist -->
-        <div class="modal" tabindex="-1" role="dialog" id="details"></div>
+        <!-- create a modal allowing too add a book to cart/watchlist  -->
+        <div class="modal1" tabindex="-1" role="dialog" id="details"></div>
 
-        <!-- this is a modal to show an error -->
-        <div class="modal" tabindex="-1" role="dialog" id="modal1">
+        <!-- This is a popup. Telling the user that creating account was UNSUCCESSFUL -->
+        <div class="modal" tabindex="-1" role="dialog" id="serverError">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Oops, Something went wrong</h5>
+                        <h5 class="modal-title">Oops, Something went wrong!</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -84,6 +84,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- this is a popup that shows a loading animation -->
         <div class="modal fade bd-example-modal-sm" id="loadingModal" tabindex="-1" role="dialog"

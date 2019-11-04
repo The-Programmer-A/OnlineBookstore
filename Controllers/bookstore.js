@@ -63,12 +63,6 @@ $(document).ready(function (e) {
     });
   });
 
-  /* This is the functionality of the links in the header.
-    MyAccount, Wishlist, Cart */
-  $("#MyAccount").click(function () {
-    console.log("Should take you to the MyAccount page");
-  });
-
   $("#Wishlist").click(function () {
     console.log("Should take you to the Wishlist page");
     //call to get information from the wishlist database.
@@ -201,6 +195,7 @@ $(document).ready(function (e) {
         if (response === false) {
           console.log("Email or Password incorrect");
           $("#failedLogin").modal("show");
+          $("#loginModal").modal("hide");
         } else {
           //the password is correct
           userEmailState = loginsEmail;
@@ -329,6 +324,7 @@ $(document).ready(function (e) {
 
   $("#opHistory").click(function () {
     console.log("take you to the order/purchase history page");
+    //need to do this.
   });
 
   $("#logout").click(function () {
