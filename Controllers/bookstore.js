@@ -1,6 +1,5 @@
 $(document).ready(function(e) {
   var userEmail = "";
-  var userLogged = false;
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
   $("#header1").hide();
@@ -233,8 +232,6 @@ $(document).ready(function(e) {
           $("#navbar2").show();
           $("#header2").hide();
           $("#header1").show();
-          userLogged = true;
-          updateUserService(userLogged);
           updateUserAuth();
           displaySuggested();
           resetLoginFields();
