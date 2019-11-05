@@ -232,7 +232,6 @@ $(document).ready(function(e) {
           $("#navbar2").show();
           $("#header2").hide();
           $("#header1").show();
-          updateUserAuth();
           displaySuggested();
           resetLoginFields();
         }
