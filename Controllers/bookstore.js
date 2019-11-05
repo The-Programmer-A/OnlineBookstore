@@ -36,7 +36,7 @@ $(document).ready(function(e) {
 
 
   $("#searchBar").click(function() {
-    $(location).attr("href", "http://localhost:5000/?#");
+    //$(location).attr("href", "http://localhost:5000/?#");
   });
 
   /*
@@ -84,7 +84,7 @@ $(document).ready(function(e) {
         }
         $("#loadingModal").modal("hide");
         $("#searchBar").val("");
-        $(location).attr("href", "http://localhost:5000/search"); // this is working
+        $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/search"); // this is working
       },
       type: "GET"
     });
