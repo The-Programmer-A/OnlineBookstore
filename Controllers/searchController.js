@@ -274,7 +274,7 @@ $(document).ready(function(e) {
     displayCartInfo();
   });
 
-  $("#Wishlist").click(function() {
+  $("#Wishlist1").click(function() {
     console.log("Should take you to the Wishlist page");
     //call to get information from the wishlist database.
     var userID = 0;
@@ -283,7 +283,7 @@ $(document).ready(function(e) {
       url: "/getID",
       method: "POST",
       contentType: "application/json",
-      data: JSON.stringify({ email: userEmail }),
+      data: JSON.stringify({ email: email }),
       success: function(response) {
         response.results.forEach(element => {
           console.log(typeof element);
@@ -302,6 +302,7 @@ $(document).ready(function(e) {
 
             wishlistInfo = response.results;
 
+
             //store all this information locally in an array - send it to another page.
             wishlistInfo = JSON.stringify(wishlistInfo);
             wishlistInfo = btoa(unescape(encodeURIComponent(wishlistInfo)));
@@ -317,7 +318,7 @@ $(document).ready(function(e) {
     });
   });
 
-  $("#Cart").click(function() {
+  $("#Cart1").click(function() {
     displayCartInfo();
   });
 
@@ -329,7 +330,7 @@ $(document).ready(function(e) {
       url: "/getID",
       method: "POST",
       contentType: "application/json",
-      data: JSON.stringify({ email: userEmail }),
+      data: JSON.stringify({ email: email }),
       success: function(response) {
         response.results.forEach(element => {
           console.log(typeof element);
