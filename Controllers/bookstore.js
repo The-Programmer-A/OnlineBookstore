@@ -1,8 +1,6 @@
 $(document).ready(function(e) {
   var userEmail = "";
-  var userEmailState = "";
   var userLogged = false;
-  var authenticate = null;
   //hide the navigation bar that should only be shown to logged in users.
   $("#navbar2").hide();
   $("#header1").hide();
@@ -222,7 +220,6 @@ $(document).ready(function(e) {
           $("#loginModal").modal("hide");
         } else {
           //the password is correct
-          userEmailState = loginsEmail;
           userEmail = loginsEmail;
           console.log(response);
           var firstName = null;
@@ -237,7 +234,6 @@ $(document).ready(function(e) {
           $("#header2").hide();
           $("#header1").show();
           userLogged = true;
-          authenticate = loginsPassword;
           updateUserService(userLogged);
           updateUserAuth();
           displaySuggested();
@@ -803,42 +799,5 @@ $(document).ready(function(e) {
     $("#inputEmail4").val("");
     $("#inputPassword").val("");
   }
-
-  function updateUserService(status) {
-    //this will send information to the service
-    if (status) {
-      userEmailState = JSON.stringify(userEmailState);
-      userEmailState = btoa(unescape(encodeURIComponent(userEmailState)));
-      localStorage.setItem("_emailState", userEmailState);
-    } else {
-      localStorage.setItem("_emailState", null);
-    }
-  }
-
-  $("#registerLink2").click(function() {
-    $("#mustbesignedin").modal("hide");
-  });
-
-  $("#back2Login3").click(function() {
-    $("#mustbesignedin").modal("hide");
-    $("#loginModal").modal("show");
-  });
-
-  $("#viewCartLink").click(function() {
-    $("#additionsuccess").modal("hide");
-    console.log("send the user to their cart");
-  });
-
-  $("#viewwishlistLink").click(function() {
-    $("#additionsuccesswishlist").modal("hide");
-    console.log("send the user to their wishlist");
-  });
-
-  function updateUserAuth() {
-    if (authenticate != null) {
-      authenticate = JSON.stringify(authenticate);
-      authenticate = btoa(unescape(encodeURIComponent(authenticate)));
-      localStorage.setItem("_authenticate", authenticate);
-    }
-  }
+ 
 });
