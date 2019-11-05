@@ -21,8 +21,7 @@ $(document).ready(function(e) {
       return false;
     }
 
-    formatEmail(email);
-    //log that user back in. 
+    formatEmail(email); 
     
   }
 
@@ -266,7 +265,108 @@ $(document).ready(function(e) {
 
   $("#Home1")
     .click(function(){
-      $(location).attr("href", "http://localhost:5000/?#");
+      $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/?#");
   })
-  
+
+  $("#opHistory").click(function() {
+    console.log("take you to the order/purchase history page");
+    //load the cart page
+    displayCartInfo();
+  });
+
+  $("#Wishlist").click(function() {
+    console.log("Should take you to the Wishlist page");
+    //call to get information from the wishlist database.
+    var userID = 0;
+    //get the id
+    $.ajax({
+      url: "/getID",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: userEmail }),
+      success: function(response) {
+        response.results.forEach(element => {
+          console.log(typeof element);
+          userID = element.id;
+        });
+      },
+      complete: function() {
+        //use the id of active user and the isbn to populate database.
+        $.ajax({
+          url: "/wishlistInfo",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ userid: userID }),
+          success: function(response) {
+            var wishlistInfo = [];
+
+            wishlistInfo = response.results;
+
+            //store all this information locally in an array - send it to another page.
+            wishlistInfo = JSON.stringify(wishlistInfo);
+            wishlistInfo = btoa(unescape(encodeURIComponent(wishlistInfo)));
+            localStorage.setItem("_wishlist", wishlistInfo);
+          },
+          complete: function() {
+            console.log("wishlist info gained");
+            //move the the new page.
+            $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/wishlistPage");
+          }
+        });
+      }
+    });
+  });
+
+  $("#Cart").click(function() {
+    displayCartInfo();
+  });
+
+  function displayCartInfo() {
+    console.log("Should take you to the Cart page");
+    var userID = 0;
+    //get the id
+    $.ajax({
+      url: "/getID",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({ email: userEmail }),
+      success: function(response) {
+        response.results.forEach(element => {
+          console.log(typeof element);
+          userID = element.id;
+        });
+      },
+      complete: function() {
+        //use the id of active user and the isbn to populate database.
+        $.ajax({
+          url: "/cartInfo",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify({ userid: userID }),
+          success: function(response) {
+            console.log("RESPONSE" + JSON.stringify(response));
+            var cartInfo = [];
+            cartInfo = response.results;
+            //store all this information locally in an array - send it to another page.
+            cartInfo = JSON.stringify(cartInfo);
+            cartInfo = btoa(unescape(encodeURIComponent(cartInfo)));
+            localStorage.setItem("_cartInfo", cartInfo);
+          },
+          complete: function() {
+            console.log("cart info gained");
+            //move to the next page
+            $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/cartPage");
+          }
+        });
+      }
+    });
+  }
+
+  $("#logout").click(function() {
+    console.log("Logging user out");
+    $("#navbar2").hide();
+    $("#navbar1").show();
+    resetLoginFields();
+  });
+
 });

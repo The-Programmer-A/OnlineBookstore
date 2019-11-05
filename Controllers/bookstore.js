@@ -36,7 +36,7 @@ $(document).ready(function(e) {
 
 
   $("#searchBar").click(function() {
-    //$(location).attr("href", "http://localhost:5000/?#");
+    $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/?#");
   });
 
   /*
