@@ -9,6 +9,32 @@ $(document).ready(function(e) {
   $("#loadingcard2").hide();
   //$("#loadingModal").modal("hide");
 
+  /* this is the implmentation of the Timout Funciton
+  if the user does NOTHING on the page for 3 Minutes. They are logged out
+  and greated with a message that informs them whats occured. */
+  var idleSeconds = 180;
+
+  $(function(){
+    var idleTimer;
+    function resetTimer(){
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(whenUserIdle,idleSeconds*1000);
+    }
+    $(document.body).bind('mousemove keydown click',resetTimer); //space separated events list that we want to monitor
+    resetTimer(); // Start the timer when the page loads
+  });
+
+  function whenUserIdle(){
+    console.log("Period of inactivity");
+    if(userEmail.length > 1){
+      $("#inactivity").modal("show");
+    }
+    $("#navbar2").hide();
+    $("#navbar1").show();
+    resetLoginFields();
+  }
+
+
   $("#searchBar").click(function() {
     $(location).attr("href", "http://localhost:5000/?#");
   });
