@@ -134,7 +134,7 @@ $(document).ready(function(e) {
           complete: function() {
             console.log("wishlist info gained");
             //move the the new page.
-            $(location).attr("href", "http://localhost:5000/wishlistPage");
+            $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/wishlistPage");
           }
         });
       }
@@ -188,7 +188,7 @@ $(document).ready(function(e) {
           complete: function() {
             console.log("cart info gained");
             //move to the next page
-            $(location).attr("href", "http://localhost:5000/cartPage");
+            $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/cartPage");
           }
         });
       }
