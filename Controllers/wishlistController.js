@@ -58,6 +58,7 @@ $(document).ready(function (e) {
           var para = $("<img/>")
             .attr("src", currentBookData.items[0].volumeInfo.imageLinks.thumbnail)
             .attr("id", "thumbnail")
+            .attr("style", "float: right")
             .appendTo(div);
 
           var small = $("<small/>")
@@ -79,6 +80,11 @@ $(document).ready(function (e) {
       });
     }
 
+   
+  }
+
+  //herlper variable to obtain the items within the modal.
+  function getData(data) {
     var modal = $("div.modal1");
     $(".list-group-item").click(function () {
       selectedItem = $(this).attr("id");
@@ -235,11 +241,6 @@ $(document).ready(function (e) {
         });
       });
     });
-  }
-
-  //herlper variable to obtain the items within the modal.
-  function getData(data) {
-    
   }
 
   //this is required to rest the modal list

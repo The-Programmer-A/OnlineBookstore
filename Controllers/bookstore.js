@@ -115,6 +115,10 @@ $(document).ready(function (e) {
   });
 
   $("#Cart").click(function () {
+    displayCartInfo();
+  });
+
+  function displayCartInfo(){
     console.log("Should take you to the Cart page");
     var userID = 0;
     //get the id
@@ -161,15 +165,7 @@ $(document).ready(function (e) {
         });
       }
     });
-  });
-
-  /* This is dealing with the inputs of the login popup modal. handles the 
-    functionality of the googlesignin and the createaccount links.
-    also handles the functionality of the login - need to be checked against the database */
-  $("#GoogleSignIn").click(function () {
-    console.log("Take you the the OAuth Page");
-    resetLoginFields();
-  });
+  }
 
   $("#forgotPasswordLink").click(function () {
     console.log("take you to the forgot password page");
@@ -230,11 +226,6 @@ $(document).ready(function (e) {
     resetCreateAccount();
   });
 
-  /* dealing with the functionalities within the CreateAccount popup modal. */
-  $("#GoogleSignIn2").click(function () {
-    console.log("Take you the the OAuth Page 2");
-    resetCreateAccount();
-  });
 
   //hide the create account form and show the login form again
   $("#back2Login").click(function () {
@@ -324,7 +315,8 @@ $(document).ready(function (e) {
 
   $("#opHistory").click(function () {
     console.log("take you to the order/purchase history page");
-    //need to do this.
+    //load the cart page
+    displayCartInfo();
   });
 
   $("#logout").click(function () {
