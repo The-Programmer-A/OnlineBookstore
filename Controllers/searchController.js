@@ -1,5 +1,5 @@
 $(document).ready(function(e) {
-
+  //global variables & Any HTML that should be hidden to a unlogged in user.
   $("#navbar1").hide();
   $("#navbar2").hide();
   loadData();
@@ -8,23 +8,24 @@ $(document).ready(function(e) {
   var selectedItem;
   var email;
 
+  /* Helper method to load that data that was stored 
+    when the user clicked the link to enter this page from home. */
   function loadEmail(){
     email = localStorage.getItem("_email");
     localStorage.removeItem("_email");
     email = atob(email);
 
-    console.log(email);
-    if(!email.includes('@')){
+    if(!email.includes('@')){ //ensure the email is correct.
       console.log("no email for this user")
       $("#navbar1").show();
       $("#navbar2").hide();
       return false;
     }
-
-    formatEmail(email); 
-    
+    formatEmail(email); //call helper method to get Email ready to be queried
   }
 
+  /* Implentation of helper method allows for verification of user. Ensure they
+  are registered members. Does this by using the service to ensure valid user*/
   function formatEmail(email1){
     email = email1.replace(/['"]+/g, '');
     var firstName = null;
@@ -35,20 +36,20 @@ $(document).ready(function(e) {
       data: JSON.stringify({ email: email }),
       success: function(response) {
           response.results.forEach(element => {
-            console.log(element);
             firstName = element.firstname;
           });
-        console.log(firstName);
         $("#uservalue").html("Welcome " + firstName);
         $("#navbar2").show();
       }
     });
   }
 
+  /* Helper method used to obtain the locally stored data. This is the 
+  storeage of book JSON Data. Use this data to display the information 
+  synamically in the HTML */
   function loadData() {
     data = localStorage.getItem("_account");
     if (!data) {
-      console.log("there is not results");
       noResultFlag = true;
       return false;
     }
@@ -56,13 +57,12 @@ $(document).ready(function(e) {
     data = atob(data);
     data = JSON.parse(data);
 
-    console.log(data);
     displayData(data);
   }
 
-  //helper function used to display the information to the user. - builtds a form
+  /* helper function used to display the information dynamically by building HTML
+  within to display the Book information in view */
   function displayData(data) {
-    console.log(data);
     var cList = $("div.list-group");
     for (let i = 0; i < data.items.length; i++) {
       var aaa = $("<a/>")
@@ -102,7 +102,8 @@ $(document).ready(function(e) {
     }
   }
 
-  //herlper variable to obtain the items within the modal.
+  /*  herlper function to obtain the items within the modal.
+  this allows for each individual item in the list to be selected and acted against*/
   var modal = $("div.modal");
   $(".list-group-item").click(function() {
     selectedItem = $(this).attr("id");
@@ -177,7 +178,10 @@ $(document).ready(function(e) {
     $("#details").modal("show");
     console.log("you clicked: " + $(this).attr("id"));
     
-    //inner functions of the selected items buttons.
+    /* inner functions of the selected items buttons.
+    Implementation of the add to cart and add to wishlist buttons. 
+    The book information if then extracted and added into the associated 
+    database, storing any function by user in the server*/
     $("#cart").click(function() {
       console.log("cart clicked");
       if(email === null){
@@ -258,22 +262,25 @@ $(document).ready(function(e) {
     });
   });
 
-  //this is required to rest the modal list
+  //this is required to rest the modal list thus only displaying clicked item
   $(".modal").on("hidden.bs.modal", function() {
     $(".modal").html("");
   });
 
+  /* Implentation of link to take you back to the home page */
   $("#Home1")
     .click(function(){
       $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/?#");
   })
 
+  /* Implementation of link to take you to orders */
   $("#opHistory").click(function() {
     console.log("take you to the order/purchase history page");
     //load the cart page
     displayCartInfo();
   });
 
+   /* Implementation of link to take you to wishlist */
   $("#Wishlist1").click(function() {
     console.log("Should take you to the Wishlist page");
     //call to get information from the wishlist database.
@@ -318,6 +325,7 @@ $(document).ready(function(e) {
     });
   });
 
+   /* Implementation of link to take you to cart */
   $("#Cart1").click(function() {
     displayCartInfo();
   });
@@ -363,6 +371,7 @@ $(document).ready(function(e) {
     });
   }
 
+   /* Implementation of link to log user out. */
   $("#logout").click(function() {
     console.log("Logging user out");
     $("#navbar2").hide();

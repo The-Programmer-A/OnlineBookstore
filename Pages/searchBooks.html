@@ -25,7 +25,7 @@
 
     <!-- This allows the bookstore.js to link with index.html -->
     <script src="../Controllers/searchController.js"></script>
-
+    <!-- CSS Styling -->
     <style type="text/css">
         .thumbnail {
             justify-content: center;
@@ -36,7 +36,6 @@
             float: right;
         }
     </style>
-
 </head>
 
 <body>
@@ -48,13 +47,14 @@
                 <h2> BookStore Search Results </h2>
             </div>
         </nav>
-
+        <!-- Link to take you back to the home page -->
         <ul class="nav justify-content-center" style="background-color: #156b92;">
             <li>
                 <a class="nav-link active" href="#" id="Home1" style="color: #f8f8f8; justify-content: center;"> <i
                         class="fas fa-home"></i>Home</a>
             </li>
         </ul>
+        <!-- unloggedin is shown this information -->
         <ul class="nav justify-content-end" id="navbar1" style="background-color: #156b92;">
             <li>
                 <a class="info" style="color: #f8f8f8; justify-content: center;"> <i class="fas fa-book-reader"></i>
@@ -62,7 +62,7 @@
             </li>
         </ul>
 
-        <!-- Navigation Bar before user has logged in -->
+        <!-- Navigation Bar after user has logged in -->
         <nav class="navbar navbar-expand-lg navbar-dark" id="navbar2" style="background-color: #156b92;">
             <a class="welcomeMessage" style="color: #f8f8f8;" id="uservalue" value=""></a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">

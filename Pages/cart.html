@@ -25,7 +25,6 @@
 
     <!-- This allows the bookstore.js to link with index.html -->
     <script src="../Controllers/cartController.js"></script>
-
 </head>
 
 
@@ -38,13 +37,8 @@
             <div class="header1" style="color: aliceblue;">
                 <h2> BookStore Search Results </h2>
             </div>
-            <!-- <form class="form-inline">
-                    <input class="form-control mr-sm-2" id="searchBar2" type="search" placeholder="Looking for something"
-                      aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchBtn2">Search</button>
-            </form> -->
         </nav>
-
+        <!-- Link to take you back to the home page -->
         <ul class="nav justify-content-center" style="background-color: #156b92;">
             <li>
                 <a class="nav-link active" href="#" id="Home1" style="color: #f8f8f8; justify-content: center;"> <i
@@ -55,7 +49,7 @@
         <!-- show the information of the cart -->
         <div class="list-group"></div>
 
-        <!-- this is a modal to show an error -->
+        <!-- this is a modal to show an error if Google Books returns 500 response code-->
         <div class="modal" tabindex="-1" role="dialog" id="modal1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -96,9 +90,6 @@
                 </div>
             </div>
         </div>
-
-
-
 </body>
 
 </html>
