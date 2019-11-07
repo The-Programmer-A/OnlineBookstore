@@ -17,7 +17,7 @@ $(document).ready(function(e) {
            email:email
          }),
          success: function(response) {
-           //console.log(response);
+           console.log(response);
          },
       });
  	 });

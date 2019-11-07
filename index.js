@@ -305,9 +305,9 @@ express()
      var result = await client.query(`SELECT * FROM user_accounts WHERE email='${email}' LIMIT 1;`);
      console.log(result);
      if (typeof result.rows[0]=='undefined') {
+      res.status(200).send(false);
        console.log('No '+email+ ' email be found in database');
        return res.send('No this email found');
-       res.status(200).send(false);
      }else{
        //if user has the token then check the token expired time
        if(result.rows[0].resetpasswordtoken==null){
@@ -372,6 +372,7 @@ express()
            var id=result.rows[0].id;
            var result2 = await client.query("UPDATE user_accounts SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
            //nodemailer is a package from NPM that allows us to send mail
+           
            const smtpTransport = nodemailer.createTransport({
              service: 'Gmail',
              auth: {
