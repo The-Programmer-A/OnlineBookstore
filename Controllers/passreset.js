@@ -20,8 +20,7 @@ $(document).ready(function(e) {
          }),
          success: function(response) {
            console.log(response);
-
-           if(response === false){
+           if(response === false){ //if the uses email is not within the database.
              console.log("The email you have entered is not within out database");
              $("#emailError").modal("show"); //show the error modal
            }
