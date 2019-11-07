@@ -302,7 +302,7 @@ express()
    try {
      var email=req.body.email;
      const client = await pool.connect()
-     var result = await client.query(`SELECT * FROM users WHERE email='${email}' LIMIT 1;`);
+     var result = await client.query(`SELECT * FROM user_accounts WHERE email='${email}' LIMIT 1;`);
      if (typeof result.rows[0]=='undefined') {
        console.log('No '+email+ ' email be found in database');
        return res.send('No this email found');
@@ -321,7 +321,7 @@ express()
          console.log("Expire Timestamp:"+expiryDateTimeStamp);
          //update database of this user
          var id=result.rows[0].id;
-         var result2 = await client.query("UPDATE users SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
+         var result2 = await client.query("UPDATE user_accounts SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
          //nodemailer is a package from NPM that allows us to send mail
          const smtpTransport = nodemailer.createTransport({
            service: 'Gmail',
@@ -369,7 +369,7 @@ express()
            console.log("Expire Timestamp:"+expiryDateTimeStamp);
            //update database of this user
            var id=result.rows[0].id;
-           var result2 = await client.query("UPDATE users SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
+           var result2 = await client.query("UPDATE user_accounts SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
            //nodemailer is a package from NPM that allows us to send mail
            const smtpTransport = nodemailer.createTransport({
              service: 'Gmail',
@@ -451,9 +451,9 @@ express()
 
    try {
      const client = await pool.connect()
-     var result = await client.query(`SELECT * FROM users WHERE resetpasswordtoken='${resetpasswordtoken}' LIMIT 1;`);
+     var result = await client.query(`SELECT * FROM user_accounts WHERE resetpasswordtoken='${resetpasswordtoken}' LIMIT 1;`);
      if (typeof result.rows[0]=='undefined') {
-       var result3 = await client.query(`UPDATE users SET resetpasswordtoken=null, resetpasswordexpires=null WHERE resetpasswordtoken='${globaltoken2}'`);
+       var result3 = await client.query(`UPDATE user_accounts SET resetpasswordtoken=null, resetpasswordexpires=null WHERE resetpasswordtoken='${globaltoken2}'`);
        console.log("Your token is invaild. Cleared the invaild token!");
        return res.send('No token found');
        res.status(200).send(false);
@@ -466,7 +466,7 @@ express()
        }else{
          var id=result.rows[0].id;
          //update database of password and clear old token and token timestamp
-         var result2 = await client.query(`UPDATE users SET password='${dbHash}', salt='${dbsalt}', resetpasswordtoken=null, resetpasswordexpires=null WHERE id=${id}`);
+         var result2 = await client.query(`UPDATE user_accounts SET hashpassword='${dbHash}', salt='${dbsalt}', resetpasswordtoken=null, resetpasswordexpires=null WHERE id=${id}`);
          if(!result2){
            return res.send("UPDATE Failure");
          } else {
