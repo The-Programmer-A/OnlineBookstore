@@ -1,6 +1,8 @@
 
 $(document).ready(function(e) {
 
+  //$("#dialog").hide();
+
   $('#confirm').button().click(
  	 function(){
    	 	var email= $('#email').val();
@@ -18,6 +20,11 @@ $(document).ready(function(e) {
          }),
          success: function(response) {
            console.log(response);
+
+           if(response === false){
+             console.log("The email you have entered is not within out database");
+             $("#emailError").modal("show"); //show the error modal
+           }
          },
       });
  	 });
