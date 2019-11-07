@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <!-- Ajax-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+     <!-- Main CSS-->
+     <link href="../public/PassresetCss/main.css" rel="stylesheet" media="all">
+     <link href="../public/PassresetCss/jquery-ui.min.css" rel="stylesheet">
+     <!-- Jquery JS-->
+     <script src="../public/js/jquery.min.js"></script>
+     <script src="../public/js/jquery-ui.min.js"></script>
+
+    <!-- Main JS-->
+    <script src="../Controllers/reset.js"></script>
+</head>
+
+<body>
+    <div class="page-wrapper bg-blue p-t-100 p-b-100 font-robo">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-1">
+                <div class="card-heading"></div>
+                <div class="card-body">
+                   <form action="/reset/<%= token %>" method="POST">
+                        <h2 class="title">Password Reset</h2>
+                        <div class="input-group">
+                            <label for="password">New Password</label>
+                            <input class="input--style-1" type="password" placeholder="Password" name="password" id="newpass">
+                        </div>
+                        <div class="input-group">
+                            <label for="confirm">Confirm Password</label>
+                            <input class="input--style-1" type="password" placeholder="Password" name="password" id="cnewpass">
+                        </div>
+                        <div class="p-t-20">
+                            <button class="btn btn--radius btn--green" type="button" id="update">Update Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

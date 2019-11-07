@@ -11,8 +11,13 @@ var bodyParser = require('body-parser');
 const PORT = process.env.PORT || 5000
 
 const bcrypt = require('bcryptjs');
+const moment=require("moment");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 global.loggedinFlag = false;
+var globaltoken='';
+var globaltoken2='';
 
 
 express()
@@ -25,6 +30,8 @@ express()
   .get('/wishlistPage', (req, res) => res.sendFile('./Pages/wishlist.html', {root: __dirname}))
   //this is a call to the cart page
   .get('/cartPage', (req, res) => res.sendFile('./Pages/cart.html', {root: __dirname}))
+  //this calls to the forgotpass page
+  .get('/forgotPage', (req, res) => res.sendFile('./Pages/index.html', {root: __dirname}))
   //call to get the ID primary key within the user_accounts - allowing forign key us in other tables
   .post('/getID', async function (req, res) {
     var loginEmail = req.body.email;
@@ -280,7 +287,228 @@ express()
       res.send("Error " + err);
     }
   })
+  //this is implementation of Hang's Password Reset Loop
+  .get('/forgot', async (req, res) => {
+    try {
+      res.sendFile('./Pages/index.html', {root: __dirname});
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+ })
 
-  
+  //send email token of password reset part
+ .put('/forgot', async (req, res) => {
+   try {
+     var email=req.body.email;
+     const client = await pool.connect()
+     var result = await client.query(`SELECT * FROM users WHERE email='${email}' LIMIT 1;`);
+     if (typeof result.rows[0]=='undefined') {
+       console.log('No '+email+ ' email be found in database');
+       return res.send('No this email found');
+       res.status(200).send(false);
+     }else{
+       //if user has the token then check the token expired time
+       if(result.rows[0].resetpasswordtoken==null){
+         //user has not a token then create a new one
+         var token=crypto.randomBytes(16).toString('hex');
+         //set 1 day expires time
+         var expiresDateMoment=moment(new Date()).add(1,'d');
+         expiresDateMoment=moment(expiresDateMoment).format('YYYY-MM-DD HH:mm:ss');
+         var expiryDateTimeStamp=moment(expiresDateMoment).format("X");
+         console.log("Token:"+token);
+         globaltoken2=token;
+         console.log("Expire Timestamp:"+expiryDateTimeStamp);
+         //update database of this user
+         var id=result.rows[0].id;
+         var result2 = await client.query("UPDATE users SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
+         //nodemailer is a package from NPM that allows us to send mail
+         const smtpTransport = nodemailer.createTransport({
+           service: 'Gmail',
+           auth: {
+             user: 'suhang.steven@gmail.com',
+             pass: process.env.GMAILPW
+           }
+         });
+         //a email will be send from my email to user's email and user can click the email content
+         //to jump to the new host page to reset their password and also verify the user email
+         const mailOptions = {
+           to: result.rows[0].email,
+           from: 'suhang.steven@gmail.com',
+           subject: 'Book Store Password Reset',
+           text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+             'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+         };
+         //pass the mail option created above and tell user the email has been sent successfully
+         smtpTransport.sendMail(mailOptions, function(err, info) {
+           if (err) {
+             console.log(err);
+           } else {
+             console.log('Email sent: ' + info.response);
+           }
+           //'An e-mail has been sent to ' + result.rows[0].email + ' with further instructions.'
+         });
 
+       }else{
+
+         //check whether pass the expires Date
+         var currentMoment=moment(new Date());
+         var currentTimeStamp=moment(currentMoment).format("X");
+         //if pass the expires date, make a new one
+         if(result.rows[0].resetpasswordexpires<currentTimeStamp){
+           //user has not a token then create a new one
+           var token=crypto.randomBytes(16).toString('hex');
+           //set 1 day expires time
+           var expiresDateMoment=moment(new Date()).add(1,'d');
+           expiresDateMoment=moment(expiresDateMoment).format('YYYY-MM-DD HH:mm:ss');
+           var expiryDateTimeStamp=moment(expiresDateMoment).format("X");
+           console.log("Token:"+token);
+           globaltoken2=token;
+           console.log("Expire Timestamp:"+expiryDateTimeStamp);
+           //update database of this user
+           var id=result.rows[0].id;
+           var result2 = await client.query("UPDATE users SET resetpasswordtoken='"+token+"', resetpasswordexpires="+expiryDateTimeStamp+" WHERE id="+id+";");
+           //nodemailer is a package from NPM that allows us to send mail
+           const smtpTransport = nodemailer.createTransport({
+             service: 'Gmail',
+             auth: {
+               user: 'suhang.steven@gmail.com',
+               pass: process.env.GMAILPW
+             }
+           });
+           //a email will be send from my email to user's email and user can click the email content
+           //to jump to the new host page to reset their password and also verify the user email
+           const mailOptions = {
+             to: result.rows[0].email,
+             from: 'suhang.steven@gmail.com',
+             subject: 'Node.js Password Reset',
+             text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+               'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+               'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+               'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+           };
+           //pass the mail option created above and tell user the email has been sent successfully
+           smtpTransport.sendMail(mailOptions, function(err, info) {
+             if (err) {
+               console.log(err);
+             } else {
+               console.log('Email sent to '+result.rows[0].email+' :'  + info.response);
+             }
+             //'An e-mail has been sent to ' + result.rows[0].email + ' with further instructions.'
+           });
+         }else{
+           console.log("Please check your email, a email sent to your account!");
+         }
+       }
+       result.rows.forEach(row=>{
+        // console.log(row);
+       });
+       var results1 = result.rows;
+       console.log(results1)
+       res.send(results1);
+       client.release();
+     }
+   } catch (err) {
+     console.error(err);
+     res.send("Error " + err);
+   }
+ })
+
+ .get('/reset/:token', async (req, res) => {
+   try {
+     //console.log("1111111:"+req.params.token);
+     globaltoken=req.params.token;
+     res.sendFile('./Pages/reset.html', {root: __dirname});
+   } catch (err) {
+     console.error(err);
+     res.send("Error " + err);
+   }
+  })
+ //confirm new password and Store into database
+ .put('/reset/:token', async (req, res) => {
+   var npassword=req.body.cnewpass;
+   var resetpasswordtoken=globaltoken;
+   var dbsalt="";
+   var dbHash="";
+   //salt and hash the password
+   bcrypt.genSalt(10,(err, salt)=>{
+     if(err){
+       console.error(err);
+     }else{
+       dbsalt=salt;
+       bcrypt.hash(npassword,salt,(err,hash)=>{
+         if(err){
+           console.error(err);
+         }else{
+           dbHash=hash;
+         }
+       });
+     }
+   });
+
+
+   try {
+     const client = await pool.connect()
+     var result = await client.query(`SELECT * FROM users WHERE resetpasswordtoken='${resetpasswordtoken}' LIMIT 1;`);
+     if (typeof result.rows[0]=='undefined') {
+       var result3 = await client.query(`UPDATE users SET resetpasswordtoken=null, resetpasswordexpires=null WHERE resetpasswordtoken='${globaltoken2}'`);
+       console.log("Your token is invaild. Cleared the invaild token!");
+       return res.send('No token found');
+       res.status(200).send(false);
+     }else{
+       var currentMoment=moment(new Date());
+       var currentTimeStamp=moment(currentMoment).format("X");
+       //if pass the expires date, so can not change password anymore
+       if(result.rows[0].resetpasswordexpires<currentTimeStamp){
+           console.log("Password change failed. Passed the expiration date.")
+       }else{
+         var id=result.rows[0].id;
+         //update database of password and clear old token and token timestamp
+         var result2 = await client.query(`UPDATE users SET password='${dbHash}', salt='${dbsalt}', resetpasswordtoken=null, resetpasswordexpires=null WHERE id=${id}`);
+         if(!result2){
+           return res.send("UPDATE Failure");
+         } else {
+            console.log("Password Reset Success");
+            const smtpTransport = nodemailer.createTransport({
+              service: 'Gmail',
+              auth: {
+                user: 'suhang.steven@gmail.com',
+                pass: process.env.GMAILPW
+              }
+            });
+            //a email will be send from my email to user's email and user can click the email content
+            //to jump to the new host page to reset their password and also verify the user email
+            const mailOptions = {
+              to: result.rows[0].email,
+              from: 'suhang.steven@gmail.com',
+              subject: 'Your password has been changed',
+              text: 'Hello,\n\n' +
+                   'This is a confirmation that the password for your account ' + result.rows[0].email + ' has just been changed.\n'
+            };
+            //pass the mail option created above and tell user the email has been sent successfully
+            smtpTransport.sendMail(mailOptions, function(err, info) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log('An Email has been sent to '+result.rows[0].email+': ' + info.response);
+              }
+              //'An e-mail has been sent to ' + result.rows[0].email + ' with further instructions.'
+            });
+           }
+       }
+       result.rows.forEach(row=>{
+           //console.log(row);
+       });
+       var results1 = result.rows;
+       //console.log(results1);
+       res.send(results1);
+       client.release();
+     }
+   } catch (err) {
+     console.error(err);
+     res.send("Error " + err);
+   }
+  })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))

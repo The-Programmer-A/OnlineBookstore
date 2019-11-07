@@ -171,7 +171,24 @@ $(document).ready(function(e) {
   /* Implementation of the forgot password link. Users are able to reset their password.
   This links the frontend with the work done by @suhang.  */
   $("#forgotPasswordLink").click(function() {
-    console.log("Intergrate Hang's Code");
+    console.log("Intergrate ");
+
+
+    $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/forgot");
+    // $.ajax({
+    //   url: "/forgot",
+    //   method: "GET",
+    //   contentType: "application/json",
+    //   success: function(response) {
+        
+    //   },
+    //   complete: function() {
+    //     //move to the cart page
+    //     $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/forgot");
+    //   }
+    // });
+
+
     resetLoginFields();
   });
 
