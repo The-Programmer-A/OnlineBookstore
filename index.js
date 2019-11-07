@@ -303,6 +303,7 @@ express()
      var email=req.body.email;
      const client = await pool.connect()
      var result = await client.query(`SELECT * FROM user_accounts WHERE email='${email}' LIMIT 1;`);
+     console.log(result);
      if (typeof result.rows[0]=='undefined') {
        console.log('No '+email+ ' email be found in database');
        return res.send('No this email found');
