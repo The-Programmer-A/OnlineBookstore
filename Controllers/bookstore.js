@@ -172,7 +172,7 @@ $(document).ready(function(e) {
   This links the frontend with the work done by @suhang.  */
   $("#forgotPasswordLink").click(function() {
     console.log("Intergrate ");
-    $(location).attr("href", "http://localhost:5000/forgot");
+    $(location).attr("href", "https://afternoon-crag-26447.herokuapp.com/forgot");
     resetLoginFields();
   });
 
