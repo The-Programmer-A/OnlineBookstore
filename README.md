@@ -1,5 +1,5 @@
 ## 1.1 How to use the system:  
-Our application is an E-Commerce bookstore website hosted on a Heroku server which is connected to a Postgresql Database. Our application uses a RESTful server and the Google Books API to obtain service and book information, enabling the website to achieve its functionality. Users are able to register/signup with either a local system account, or be authenticated through their google accounts using OAuth. To use the system users are able to view the link: https://afternoon-crag-26447.herokuapp.com.
+Our application is an E-Commerce bookstore website hosted on a Heroku server which is connected to a Postgresql Database. Our application uses a RESTful server and the Google Books API to obtain service and book information, enabling the website to achieve its functionality. Users are able to register/signup with either a local system account, or be authenticated through their google accounts using OAuth. To use the system users are able to view the link: https://afternoon-crag-26447.herokuapp.com/?#.
 The functionality offered by the RESTful Interface is as follows:  
 
 * Create account  
